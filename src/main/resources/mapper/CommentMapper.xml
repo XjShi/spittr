@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spittr.mapper.CommentMapper">
+    <sql id="columns">
+        id,username,spittle_id AS spittleId,commented_id AS commentedId,text,attach_type AS attachType,attach_content AS attachContent,create_time AS createTime,enabled
+    </sql>
+
+    <select id="selectBySpittleId" parameterType="long" resultType="com.spittr.pojo.Comment">
+        SELECT
+        <include refid="columns"></include>
+        FROM comment
+        WHERE spittle_id=#{spittleId}
+    </select>
+    <select id="selectCommentCountByCommentId" parameterType="long" resultType="int">
+        SELECT count(id)
+        FROM comment
+        WHERE id=#{commentId}
+    </select>
+    <insert id="insertOne" parameterType="com.spittr.pojo.Comment">
+        INSERT INTO comment(username,spittle_id,commented_id,text,attach_type,attach_content,enabled)
+        VALUES(#{username},#{spittleId},#{commentedId},#{text},#{attachType},#{attachContent},#{enabled})
+    </insert>
+    <insert id="deleteById" parameterType="long">
+        DELETE FROM comment
+        WHERE id=#{commentId}
+    </insert>
+
+</mapper>

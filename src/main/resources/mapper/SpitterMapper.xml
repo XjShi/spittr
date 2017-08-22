@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spittr.mapper.SpitterMapper">
+    <sql id="columns">id, name, password, avatar, created_at AS registrationDate, enabled</sql>
+
+    <select id="selectSpitterById" parameterType="String" resultType="com.spittr.pojo.Spitter">
+        select
+        <include refid="columns"></include>
+        FROM spitter WHERE id = #{id}
+    </select>
+    <select id="selectSpitterByUsername" parameterType="String" resultType="com.spittr.pojo.Spitter">
+        SELECT <include refid="columns"></include> FROM spitter WHERE name=#{username}
+    </select>
+    <select id="selectSpitterCountByUsername" parameterType="String" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM spitter WHERE name=#{username}
+    </select>
+    <select id="selectSpitterByUsernameAndPassword" parameterType="String" resultType="com.spittr.pojo.Spitter">
+        SELECT <include refid="columns"></include>
+        FROM spitter
+        WHERE name=#{username} AND password=#{password}
+    </select>
+    <select id="getCountForAuth" parameterType="String" resultType="int">
+        SELECT COUNT(name)
+        FROM spitter
+        WHERE name=#{username} AND password=#{password}
+    </select>
+    <insert id="insertSpitter" parameterType="com.spittr.pojo.Spitter" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO spitter(name,password,avatar,created_at,enabled)
+        VALUES (#{username},#{password},#{avatar},#{registrationDate},#{enabled})
+    </insert>
+    <update id="updateEnableStatus" parameterType="com.spittr.pojo.Spitter">
+        UPDATE spitter
+        SET enabled=#{enabled}
+        WHERE name=#{username}
+    </update>
+    <update id="updateAvatar" parameterType="String">
+        UPDATE spitter
+        SET avatar=#{avatar}
+        WHERE name=#{username}
+    </update>
+
+</mapper>

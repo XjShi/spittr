@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spittr.mapper.SpittleMapper">
+    <sql id="columns">
+        id,username,text,created_at AS publishTime,attach_type AS attachType,attach_content AS attachContent,repost,comment,"like",enabled
+    </sql>
+
+    <select id="selectAll" resultType="com.spittr.pojo.Spittle">
+        SELECT
+        <include refid="columns"></include>
+        FROM spittle
+    </select>
+    <select id="selectByUsername" resultType="com.spittr.pojo.Spittle">
+        SELECT
+        <include refid="columns"></include>
+        FROM spittle
+        WHERE username=#{username}
+    </select>
+    <select id="getLatestOne" resultType="com.spittr.pojo.Spittle" parameterType="String">
+        SELECT
+        <include refid="columns"></include>
+        FROM spittle
+        WHERE username=#{username}
+        ORDER BY created_at DESC
+        LIMIT 1
+    </select>
+    <select id="selectSpittleCountById" parameterType="long" resultType="java.lang.Integer">
+        SELECT COUNT(id)
+        FROM spittle
+        WHERE id=#{id}
+    </select>
+    <insert id="insertSpittle" parameterType="com.spittr.pojo.Spittle" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO spittle(username,text,created_at,attach_type,attach_content,enabled)
+        VALUES(#{username},#{text},#{publishTime},#{attachType},#{attachContent},#{enabled})
+    </insert>
+    <delete id="deleteSpittleById" parameterType="Long">
+        DELETE FROM spittle WHERE id=#{id}
+    </delete>
+
+</mapper>
