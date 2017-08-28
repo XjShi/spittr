@@ -2,6 +2,7 @@ package com.spittr.exception;
 
 import com.spittr.exception.spitter.SpitterHasExistException;
 import com.spittr.exception.spitter.SpitterNotFoundException;
+import com.spittr.exception.transfer.TransferPartErrorException;
 import com.spittr.pojo.BaseResponse;
 import com.spittr.pojo.Spitter;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,7 +21,12 @@ public class AppWideExceptionHandler {
     }
 
     @ExceptionHandler(InvalidParameterException.class)
-    public BaseResponse invalidParamter(InvalidParameterException e) {
+    public BaseResponse invalidParameter(InvalidParameterException e) {
+        return new BaseResponse(e.getResponseCode().getCode(), e.getMessage(), null);
+    }
+
+    @ExceptionHandler(TransferPartErrorException.class)
+    public BaseResponse transferPartError(TransferPartErrorException e) {
         return new BaseResponse(e.getResponseCode().getCode(), e.getMessage(), null);
     }
 }

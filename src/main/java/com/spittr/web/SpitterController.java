@@ -5,17 +5,14 @@ import com.spittr.exception.spitter.SpitterNotFoundException;
 import com.spittr.pojo.BaseResponse;
 import com.spittr.pojo.Spitter;
 import com.spittr.service.SpitterService;
+import com.spittr.service.TransferPartService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Part;
-import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 
 @RestController
 @RequestMapping(value = {"/spitter"})
@@ -24,6 +21,8 @@ public class SpitterController {
 
     @Autowired
     private SpitterService spitterService;
+    @Autowired
+    private TransferPartService transferPartService;
 
     @RequestMapping(value = "/{param}", method = RequestMethod.GET)
     public BaseResponse<Spitter> getSpitterProfile(@PathVariable String param) {
@@ -69,24 +68,5 @@ public class SpitterController {
         logger.info(username + " try to update avatar");
         spitterService.updateAvatar(username, avatar);
         return new BaseResponse<Spitter>(spitterService.getProfileByUsername(username), "update avatar successfully");
-    }
-
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public BaseResponse<Object> upload(@RequestPart("abcimage") Part picture) {
-        Collection<String> collection = picture.getHeaderNames();
-        System.out.println(picture.getSubmittedFileName());
-        System.out.println("-----  header ------  value");
-        Iterator<String> iter = collection.iterator();
-        while (iter.hasNext()) {
-            String header = iter.next();
-            System.out.println("--- " + header + " --- " + picture.getHeader(header));
-        }
-        System.out.println("------- End --------");
-        try {
-            picture.write("/Users/xjshi/Downloads/tmp/" + picture.getSubmittedFileName());
-        } catch (IOException e) {
-            System.out.println(e.getLocalizedMessage());
-        }
-        return new BaseResponse<Object>(null);
     }
 }

@@ -1,6 +1,7 @@
 package com.spittr.enums;
 
 public enum ResponseCode {
+    FAILED(-1),
     SUCCESS(0),
     Invalid_Parameter(1),
     NOT_FOUND(4),

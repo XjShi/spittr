@@ -14,17 +14,11 @@ import static com.spittr.enums.ResponseCode.AUTHORIZATION_REQUIRED;
 
 @Component
 public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
-    static final long EXPIRATIONTIME = 1000 * 60 * 60 * 24 * 1; // 1 days
-    static final String SECRET = "asdfajslkfjlkanzjfasidfjoalkj099232jkasfaj23klj";
-    static final String TOKEN_PREFIX = "Bearer";
-    static final String AUTHORIZATION = "Authorization";
-
     @Autowired
     private TokenManager tokenManager;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println(handler.getClass() + "\t" + handler);
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }

@@ -15,4 +15,17 @@ public enum AttachmentType {
     public int getType() {
         return type;
     }
+
+    public static AttachmentType newAttachmentType(int type) {
+        switch (type) {
+            case 1:
+                return IMAGE;
+            case 2:
+                return AUDIO;
+            case 3:
+                return VIDEO;
+            default:
+                return NONE;
+        }
+    }
 }

@@ -41,11 +41,7 @@ public class TokenManager {
         if (token == null) {
             return false;
         }
-        String username = Jwts.parser()
-                .setSigningKey(SECRET)
-                .parseClaimsJws(token.replace(TOKEN_PREFIX, "").trim())
-                .getBody()
-                .getSubject();
+        String username = getUsernameFromToken(token);
         logger.info("validate auth with token: " + token + " , parsered username is " + username + ".");
         token = redis.boundValueOps(username).get();
         if (token == null) {
@@ -62,5 +58,21 @@ public class TokenManager {
     public void invalidate(String username, HttpServletResponse response) {
         redis.delete(username);
         response.setHeader(AUTHORIZATION, null);
+    }
+
+    public String getUsernameFromToken(String token) {
+        String username = Jwts.parser()
+                .setSigningKey(SECRET)
+                .parseClaimsJws(token.replace(TOKEN_PREFIX, "").trim())
+                .getBody()
+                .getSubject();
+        return username;
+    }
+
+    public String getValidUsername(HttpServletRequest request) {
+        String token = request.getHeader(AUTHORIZATION);
+        if (token == null)
+            return null;
+        return getUsernameFromToken(token);
     }
 }

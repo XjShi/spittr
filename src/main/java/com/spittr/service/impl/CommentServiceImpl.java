@@ -27,8 +27,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = new Comment();
         comment.setText(text);
         comment.setSpittleId(spittleId);
-        //todo:
-        comment.setUsername("shixj");
+        comment.setUsername(username);
         commentMapper.insertOne(comment);
     }
 
