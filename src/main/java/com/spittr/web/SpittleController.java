@@ -1,7 +1,9 @@
 package com.spittr.web;
 
 import com.spittr.annotation.Authorization;
+import com.spittr.enums.AttachmentType;
 import com.spittr.enums.ResponseCode;
+import com.spittr.manager.TokenManager;
 import com.spittr.pojo.BaseResponse;
 import com.spittr.pojo.Comment;
 import com.spittr.pojo.Spittle;
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +38,8 @@ public class SpittleController {
     private SpittleService spittleService;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private TokenManager tokenManager;
 
     @RequestMapping(method = RequestMethod.GET)
     public BaseResponse<ArrayList<Spittle>> show() {
@@ -52,12 +57,21 @@ public class SpittleController {
 
     @Authorization
     @RequestMapping(method = RequestMethod.POST)
-    public BaseResponse<Spittle> post(@RequestParam("username") String username,
-                                      @RequestParam("text") String text,
-                                      @RequestParam("attachType") int attachType,
-                                      @RequestParam("attachContent") String attachContent,
-                                      @RequestParam("enabled") boolean enabled) {
-        Spittle spittle = new Spittle(username, text, attachType, attachContent, enabled);
+    public BaseResponse<Spittle> post(@RequestParam("text") String text,
+                                      @RequestParam(value = "attachType", required = false) Integer attachType,
+                                      @RequestParam(value = "attachContent", required = false) String attachContent,
+                                      @RequestParam(value = "enabled", required = false) Boolean enabled,
+                                      HttpServletRequest request) {
+        String username = tokenManager.getValidUsername(request);
+        enabled = enabled == null ? true : enabled;
+        Spittle spittle = new Spittle(username, text, enabled);
+        if (attachType != null) {
+            AttachmentType attachmentType = AttachmentType.newAttachmentType(attachType);
+            if (attachmentType != AttachmentType.NONE && attachContent.length() > 0) {
+                spittle.setAttachType(attachType);
+                spittle.setAttachContent(attachContent);
+            }
+        }
         spittleService.saveSpittle(spittle);
         spittle = spittleService.getLastestOne(username);
         return new BaseResponse<Spittle>(spittle);
@@ -65,8 +79,10 @@ public class SpittleController {
 
     @Authorization
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public BaseResponse<Spittle> delete(@PathVariable("id") long id) {
-        spittleService.deleteSpittle(id);
+    public BaseResponse<Spittle> delete(@PathVariable("id") long id,
+                                        HttpServletRequest request) {
+        String username = tokenManager.getValidUsername(request);
+        spittleService.deleteSpittle(username, id);
         return new BaseResponse<Spittle>(null, "delete spittle successfully");
     }
 
@@ -74,8 +90,9 @@ public class SpittleController {
     @RequestMapping(value = "/{id}/comment", method = RequestMethod.POST)
     public BaseResponse<Spittle> reply(@PathVariable("id") long spittleId,
                                        @RequestParam("text") String text,
-                                       @RequestParam("username") String username) {
+                                       HttpServletRequest request) {
         logger.info("comment spittle[" + spittleId + "]: " + text);
+        String username = tokenManager.getValidUsername(request);
         commentService.comment(username, spittleId, text);
         return new BaseResponse<Spittle>(null, "comment successfully.");
     }
@@ -90,9 +107,11 @@ public class SpittleController {
     @Authorization
     @RequestMapping(value = "/{id}/comment/{commentId}", method = RequestMethod.DELETE)
     public BaseResponse deleteComment(@PathVariable("id") long id,
-                                      @PathVariable("commentId") long commentId) {
+                                      @PathVariable("commentId") long commentId,
+                                      HttpServletRequest request) {
         logger.info("delete comment[" + commentId + "] of spittle[" + id + "].");
-        commentService.deleteCommentById(commentId);
+        String username = tokenManager.getValidUsername(request);
+        commentService.deleteComment(username, commentId);
         return new BaseResponse(null, "delete comment successfully.");
     }
 }

@@ -6,6 +6,7 @@ public enum ResponseCode {
     Invalid_Parameter(1),
     NOT_FOUND(4),
     HAS_EXISTS(5),
+    NO_PERMISSION(6),
     AUTHORIZATION_REQUIRED(999);
 
     private int code;

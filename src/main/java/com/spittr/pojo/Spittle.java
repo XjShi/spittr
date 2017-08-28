@@ -27,6 +27,12 @@ public class Spittle implements Serializable {
         this.enabled = enabled;
     }
 
+    public Spittle(String username, String text, boolean enabled) {
+        this.username = username;
+        this.text = text;
+        this.enabled = enabled;
+    }
+
     public Long getId() {
         return id;
     }
@@ -57,5 +63,57 @@ public class Spittle implements Serializable {
 
     public void setPublishTime(Timestamp publishTime) {
         this.publishTime = publishTime;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public int getAttachType() {
+        return attachType;
+    }
+
+    public void setAttachType(int attachType) {
+        this.attachType = attachType;
+    }
+
+    public String getAttachContent() {
+        return attachContent;
+    }
+
+    public void setAttachContent(String attachContent) {
+        this.attachContent = attachContent;
+    }
+
+    public String getRepost() {
+        return repost;
+    }
+
+    public void setRepost(String repost) {
+        this.repost = repost;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getLike() {
+        return like;
+    }
+
+    public void setLike(String like) {
+        this.like = like;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

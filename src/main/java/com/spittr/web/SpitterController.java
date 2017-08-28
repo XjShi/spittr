@@ -2,15 +2,16 @@ package com.spittr.web;
 
 import com.spittr.annotation.Authorization;
 import com.spittr.exception.spitter.SpitterNotFoundException;
+import com.spittr.manager.TokenManager;
 import com.spittr.pojo.BaseResponse;
 import com.spittr.pojo.Spitter;
 import com.spittr.service.SpitterService;
-import com.spittr.service.TransferPartService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -22,15 +23,16 @@ public class SpitterController {
     @Autowired
     private SpitterService spitterService;
     @Autowired
-    private TransferPartService transferPartService;
+    private TokenManager tokenManager;
 
-    @RequestMapping(value = "/{param}", method = RequestMethod.GET)
-    public BaseResponse<Spitter> getSpitterProfile(@PathVariable String param) {
+    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
+    public BaseResponse<Spitter> getSpitterProfile(@PathVariable String username,
+                                                   HttpServletRequest request) {
         Spitter spitter;
-        if (StringUtils.isNumeric(param))
-            spitter = spitterService.getProfileById(param);
+        if (StringUtils.isNumeric(username))
+            spitter = spitterService.getProfileById(username, tokenManager.getValidUsername(request));
         else
-            spitter = spitterService.getProfileByUsername(param);
+            spitter = spitterService.getProfileByUsername(username, tokenManager.getValidUsername(request));
         if (spitter == null)
             throw new SpitterNotFoundException();
         return new BaseResponse<Spitter>(spitter, "query profile successfully.");
@@ -48,10 +50,11 @@ public class SpitterController {
 
     @Authorization
     @RequestMapping(value = "/{username}/disable", method = RequestMethod.PATCH)
-    public BaseResponse<Spitter> disable(@PathVariable String username) {
+    public BaseResponse<Spitter> disable(HttpServletRequest request) {
+        String username = tokenManager.getValidUsername(request);
         logger.info("disable spitter: " + username);
         spitterService.updateEnabledStatus(username, false);
-        return new BaseResponse<Spitter>(spitterService.getProfileByUsername(username), "disable successfully");
+        return new BaseResponse<Spitter>(spitterService.getProfileByUsername(username),  "disable successfully");
     }
 
     @Authorization
@@ -64,7 +67,8 @@ public class SpitterController {
 
     @Authorization
     @RequestMapping(value = "/{username}/avatar", method = RequestMethod.POST)
-    public BaseResponse<Spitter> updateAvatar(@PathVariable String username, @RequestParam("avatar") String avatar) {
+    public BaseResponse<Spitter> updateAvatar(@RequestParam("avatar") String avatar, HttpServletRequest request) {
+        String username = tokenManager.getValidUsername(request);
         logger.info(username + " try to update avatar");
         spitterService.updateAvatar(username, avatar);
         return new BaseResponse<Spitter>(spitterService.getProfileByUsername(username), "update avatar successfully");

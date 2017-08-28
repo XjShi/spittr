@@ -4,6 +4,7 @@ import com.spittr.exception.InvalidParameterException;
 import com.spittr.exception.spitter.SpitterHasExistException;
 import com.spittr.mapper.SpitterMapper;
 import com.spittr.pojo.Spitter;
+import com.spittr.pojo.Spittle;
 import com.spittr.service.SpitterService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +56,26 @@ public class SpitterServiceImpl implements SpitterService {
         return count != 0;
     }
 
-    public Spitter getProfileById(String id) {
-        return spitterMapper.selectSpitterById(id);
+    public Spitter getProfileById(String id, String validUsername) {
+        Spitter spitter = spitterMapper.selectSpitterById(id);
+        return getSafeProfile(spitter, validUsername);
+    }
+
+    public Spitter getProfileByUsername(String username, String validUsername) {
+        Spitter spitter = spitterMapper.selectSpitterByUsername(username);
+        return getSafeProfile(spitter, validUsername);
     }
 
     public Spitter getProfileByUsername(String username) {
-        return spitterMapper.selectSpitterByUsername(username);
+        Spitter spitter = getProfileByUsername(username, "");
+        spitter.setPassword(null);
+        return spitter;
+    }
+
+    private Spitter getSafeProfile(Spitter spitter, String validUsername) {
+        if (spitter != null && !validUsername.equals(spitter.getUsername())) {
+            spitter.setPassword(null);
+        }
+        return spitter;
     }
 }

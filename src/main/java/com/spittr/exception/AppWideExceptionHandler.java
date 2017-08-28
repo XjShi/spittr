@@ -21,12 +21,17 @@ public class AppWideExceptionHandler {
     }
 
     @ExceptionHandler(InvalidParameterException.class)
-    public BaseResponse invalidParameter(InvalidParameterException e) {
+    public BaseResponse<Object> invalidParameter(InvalidParameterException e) {
         return new BaseResponse(e.getResponseCode().getCode(), e.getMessage(), null);
     }
 
     @ExceptionHandler(TransferPartErrorException.class)
-    public BaseResponse transferPartError(TransferPartErrorException e) {
+    public BaseResponse<Object> transferPartError(TransferPartErrorException e) {
+        return new BaseResponse(e.getResponseCode().getCode(), e.getMessage(), null);
+    }
+
+    @ExceptionHandler(javax.naming.NoPermissionException.class)
+    public BaseResponse<Object> noPermission(NoPermissionException e) {
         return new BaseResponse(e.getResponseCode().getCode(), e.getMessage(), null);
     }
 }

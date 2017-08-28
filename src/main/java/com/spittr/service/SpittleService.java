@@ -9,6 +9,7 @@ public interface SpittleService {
     ArrayList<Spittle> getListByUsername(String username);
     Spittle saveSpittle(Spittle spittle);
     Spittle getLastestOne(String username);
-    void deleteSpittle(long id);
+    boolean deleteSpittle(String username, long id);
     boolean queryIfExistById(long spittleId);
+    boolean isSpitterHasChangePermission(String username, long id);
 }

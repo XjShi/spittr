@@ -12,4 +12,5 @@ public interface SpittleMapper {
     Spittle getLatestOne(@Param("username") String username);
     void deleteSpittleById(@Param("id") long id);
     int selectSpittleCountById(@Param("id") long id);
+    Spittle getSpittleById(@Param("id") long id);
 }

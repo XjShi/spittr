@@ -31,6 +31,12 @@
         FROM spittle
         WHERE id=#{id}
     </select>
+    <select id="getSpittleById" parameterType="long" resultType="com.spittr.pojo.Spittle">
+        SELECT
+        <include refid="columns"></include>
+        FROM spittle
+        WHERE id=#{id}
+    </select>
     <insert id="insertSpittle" parameterType="com.spittr.pojo.Spittle" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO spittle(username,text,created_at,attach_type,attach_content,enabled)
         VALUES(#{username},#{text},#{publishTime},#{attachType},#{attachContent},#{enabled})

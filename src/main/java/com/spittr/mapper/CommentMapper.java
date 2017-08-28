@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public interface CommentMapper {
     void insertOne(Comment comment);
-    void deleteById(@Param("commentId") long commentId);
+    int deleteComment(@Param("username") String username, @Param("commentId") long commentId);
     ArrayList selectBySpittleId(@Param("spittleId") long spittleId);
     int selectCommentCountByCommentId(@Param("commentId") long commentId);
 }

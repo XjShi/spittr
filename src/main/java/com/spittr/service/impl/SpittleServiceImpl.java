@@ -2,8 +2,10 @@ package com.spittr.service.impl;
 
 import com.spittr.annotation.Authorization;
 import com.spittr.exception.InvalidParameterException;
+import com.spittr.exception.NoPermissionException;
 import com.spittr.exception.spitter.SpitterNotFoundException;
 import com.spittr.mapper.SpittleMapper;
+import com.spittr.pojo.Spitter;
 import com.spittr.pojo.Spittle;
 import com.spittr.service.SpitterService;
 import com.spittr.service.SpittleService;
@@ -48,11 +50,21 @@ public class SpittleServiceImpl implements SpittleService {
         return spittleMapper.getLatestOne(username);
     }
 
-    public void deleteSpittle(long id) {
+    public boolean deleteSpittle(String username, long id) {
+        boolean hasPermission = isSpitterHasChangePermission(username, id);
+        if (!hasPermission) {
+            throw new NoPermissionException("no permission to delete the spittle.");
+        }
         spittleMapper.deleteSpittleById(id);
+        return true;
     }
 
     private boolean queryIfUserExistByUsername(String username) {
         return spitterService.queryIfExistsByName(username);
+    }
+
+    public boolean isSpitterHasChangePermission(String username, long id) {
+        Spittle spittle = spittleMapper.getSpittleById(id);
+        return spittle.getUsername().equals(username);
     }
 }

@@ -22,9 +22,9 @@
         INSERT INTO comment(username,spittle_id,commented_id,text,attach_type,attach_content,enabled)
         VALUES(#{username},#{spittleId},#{commentedId},#{text},#{attachType},#{attachContent},#{enabled})
     </insert>
-    <insert id="deleteById" parameterType="long">
+    <insert id="deleteComment">
         DELETE FROM comment
-        WHERE id=#{commentId}
+        WHERE id=#{commentId} AND username=#{deleteComment}
     </insert>
 
 </mapper>

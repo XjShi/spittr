@@ -4,14 +4,14 @@ import com.spittr.enums.AttachmentType;
 
 public class File {
     private String name;
-    private AttachmentType type;
+    private int type;
 
     public File() {
     }
 
-    public File(String name, AttachmentType type) {
+    public File(String name, AttachmentType attachmentType) {
         this.name = name;
-        this.type = type;
+        this.type = attachmentType.getType();
     }
 
     public String getName() {
@@ -22,11 +22,11 @@ public class File {
         this.name = name;
     }
 
-    public AttachmentType getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(AttachmentType type) {
+    public void setType(int type) {
         this.type = type;
     }
 }

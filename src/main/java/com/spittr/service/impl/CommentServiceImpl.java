@@ -35,11 +35,12 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.selectCommentCountByCommentId(commentId) > 0;
     }
 
-    public void deleteCommentById(long commentId) {
+    public boolean deleteComment(String username, long commentId) {
         if (!queryIfCommentExistsById(commentId)) {
             throw new InvalidParameterException("comment[" + commentId + "] doesn't exists");
         }
-        commentMapper.deleteById(commentId);
+        commentMapper.deleteComment(username, commentId);
+        return true;
     }
 
     public List<Comment> getComments(long spittleId) {
