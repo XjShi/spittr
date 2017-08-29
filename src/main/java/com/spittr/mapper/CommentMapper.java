@@ -10,4 +10,5 @@ public interface CommentMapper {
     int deleteComment(@Param("username") String username, @Param("commentId") long commentId);
     ArrayList selectBySpittleId(@Param("spittleId") long spittleId);
     int selectCommentCountByCommentId(@Param("commentId") long commentId);
+    int selectCount(@Param("spittleId") long spittleId);
 }

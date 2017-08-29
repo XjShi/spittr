@@ -50,4 +50,9 @@ public class CommentServiceImpl implements CommentService {
         }
         return commentMapper.selectBySpittleId(spittleId);
     }
+
+    public int getCount(long spittleId) {
+        int count = commentMapper.selectCount(spittleId);
+        return count;
+    }
 }

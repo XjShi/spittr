@@ -2,6 +2,7 @@ package com.spittr.pojo;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Spittle implements Serializable {
     private static final long serialVersionUID = 1L;    //serialVersionUID
@@ -10,11 +11,11 @@ public class Spittle implements Serializable {
     private String text;
     private int attachType;
     private String attachContent;
-    private String repost;
-    private String comment;
-    private String like;
+    private String repost;  //  json text composed by reposter's username
+    private String like;    //  idem
     private boolean enabled;
     private Timestamp publishTime;
+    private List<Comment> commentList;
 
     public Spittle() {
     }
@@ -28,9 +29,7 @@ public class Spittle implements Serializable {
     }
 
     public Spittle(String username, String text, boolean enabled) {
-        this.username = username;
-        this.text = text;
-        this.enabled = enabled;
+        this(username, text, 0, null, enabled);
     }
 
     public Long getId() {
@@ -93,14 +92,6 @@ public class Spittle implements Serializable {
         this.repost = repost;
     }
 
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
     public String getLike() {
         return like;
     }
@@ -115,5 +106,13 @@ public class Spittle implements Serializable {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 }

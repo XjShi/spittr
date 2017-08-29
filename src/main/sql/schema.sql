@@ -53,3 +53,5 @@ FOREIGN KEY (username) REFERENCES spitter (name) ON DELETE CASCADE ON UPDATE CAS
 ALTER TABLE spittr.spittle
   ADD CONSTRAINT spittle_spitter_name_fk
 FOREIGN KEY (username) REFERENCES spitter (name) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE spittr.spittle DROP comment;

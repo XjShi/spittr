@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -42,29 +41,29 @@ public class SpittleController {
     private TokenManager tokenManager;
 
     @RequestMapping(method = RequestMethod.GET)
-    public BaseResponse<ArrayList<Spittle>> show() {
-        return new BaseResponse<ArrayList<Spittle>>(ResponseCode.SUCCESS.getCode(),
+    public BaseResponse<List<Spittle>> show() {
+        return new BaseResponse<List<Spittle>>(ResponseCode.SUCCESS.getCode(),
                 "get spittle list successfully",
                 spittleService.getList());
     }
 
     @RequestMapping(value = "/{username}", method = RequestMethod.GET)
-    public BaseResponse<ArrayList<Spittle>> showByUsername(@PathVariable String username) {
-        return new BaseResponse<ArrayList<Spittle>>(ResponseCode.SUCCESS.getCode(),
+    public BaseResponse<List<com.spittr.pojo.Spittle>> showByUsername(@PathVariable String username) {
+        return new BaseResponse<List<com.spittr.pojo.Spittle>>(ResponseCode.SUCCESS.getCode(),
                 "get spittle list successfully",
                 spittleService.getListByUsername(username));
     }
 
     @Authorization
     @RequestMapping(method = RequestMethod.POST)
-    public BaseResponse<Spittle> post(@RequestParam("text") String text,
-                                      @RequestParam(value = "attachType", required = false) Integer attachType,
-                                      @RequestParam(value = "attachContent", required = false) String attachContent,
-                                      @RequestParam(value = "enabled", required = false) Boolean enabled,
-                                      HttpServletRequest request) {
+    public BaseResponse<com.spittr.pojo.Spittle> post(@RequestParam("text") String text,
+                                                      @RequestParam(value = "attachType", required = false) Integer attachType,
+                                                      @RequestParam(value = "attachContent", required = false) String attachContent,
+                                                      @RequestParam(value = "enabled", required = false) Boolean enabled,
+                                                      HttpServletRequest request) {
         String username = tokenManager.getValidUsername(request);
         enabled = enabled == null ? true : enabled;
-        Spittle spittle = new Spittle(username, text, enabled);
+        com.spittr.pojo.Spittle spittle = new com.spittr.pojo.Spittle(username, text, enabled);
         if (attachType != null) {
             AttachmentType attachmentType = AttachmentType.newAttachmentType(attachType);
             if (attachmentType != AttachmentType.NONE && attachContent.length() > 0) {
@@ -74,27 +73,27 @@ public class SpittleController {
         }
         spittleService.saveSpittle(spittle);
         spittle = spittleService.getLastestOne(username);
-        return new BaseResponse<Spittle>(spittle);
+        return new BaseResponse<com.spittr.pojo.Spittle>(spittle);
     }
 
     @Authorization
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public BaseResponse<Spittle> delete(@PathVariable("id") long id,
-                                        HttpServletRequest request) {
+    public BaseResponse<com.spittr.pojo.Spittle> delete(@PathVariable("id") long id,
+                                                        HttpServletRequest request) {
         String username = tokenManager.getValidUsername(request);
         spittleService.deleteSpittle(username, id);
-        return new BaseResponse<Spittle>(null, "delete spittle successfully");
+        return new BaseResponse<com.spittr.pojo.Spittle>(null, "delete spittle successfully");
     }
 
     @Authorization
     @RequestMapping(value = "/{id}/comment", method = RequestMethod.POST)
-    public BaseResponse<Spittle> reply(@PathVariable("id") long spittleId,
-                                       @RequestParam("text") String text,
-                                       HttpServletRequest request) {
+    public BaseResponse<com.spittr.pojo.Spittle> reply(@PathVariable("id") long spittleId,
+                                                       @RequestParam("text") String text,
+                                                       HttpServletRequest request) {
         logger.info("comment spittle[" + spittleId + "]: " + text);
         String username = tokenManager.getValidUsername(request);
         commentService.comment(username, spittleId, text);
-        return new BaseResponse<Spittle>(null, "comment successfully.");
+        return new BaseResponse<com.spittr.pojo.Spittle>(null, "comment successfully.");
     }
 
     @RequestMapping(value = "/{id}/comment", method = RequestMethod.GET)

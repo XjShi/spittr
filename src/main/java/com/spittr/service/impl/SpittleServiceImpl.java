@@ -1,18 +1,17 @@
 package com.spittr.service.impl;
 
-import com.spittr.annotation.Authorization;
 import com.spittr.exception.InvalidParameterException;
 import com.spittr.exception.NoPermissionException;
 import com.spittr.exception.spitter.SpitterNotFoundException;
 import com.spittr.mapper.SpittleMapper;
-import com.spittr.pojo.Spitter;
 import com.spittr.pojo.Spittle;
+import com.spittr.service.CommentService;
 import com.spittr.service.SpitterService;
 import com.spittr.service.SpittleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SpittleServiceImpl implements SpittleService {
@@ -20,16 +19,24 @@ public class SpittleServiceImpl implements SpittleService {
     private SpittleMapper spittleMapper;
     @Autowired
     private SpitterService spitterService;
+    @Autowired
+    private CommentService commentService;
 
-    public ArrayList<Spittle> getList() {
+    public List<Spittle> getList() {
         return spittleMapper.selectAll();
     }
 
-    public ArrayList<Spittle> getListByUsername(String username) {
+    public List<Spittle> getListByUsername(String username) {
         if (!this.queryIfUserExistByUsername(username)) {
             throw new SpitterNotFoundException();
         }
-        return spittleMapper.selectByUsername(username);
+        List<Spittle> spittles = spittleMapper.selectByUsername(username);
+        return spittles;
+    }
+
+    //todo
+    public Spittle getSpittleDetail(long spittleId) {
+        return spittleMapper.selectOne(spittleId);
     }
 
     public Spittle saveSpittle(Spittle spittle) {

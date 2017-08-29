@@ -7,6 +7,17 @@
         id,username,spittle_id AS spittleId,commented_id AS commentedId,text,attach_type AS attachType,attach_content AS attachContent,create_time AS createTime,enabled
     </sql>
 
+    <resultMap id="commentResultMap" type="com.spittr.pojo.Comment">
+        <id column="comment_id" property="id"/>
+        <id column="comment_username" property="username"/>
+        <id column="comment_commented_id" property="commentedId"/>
+        <id column="comment_text" property="text"/>
+        <id column="comment_attach_type" property="attachType"/>
+        <id column="comment_attach_content" property="attachContent"/>
+        <id column="comment_create_time" property="createTime"/>
+        <id column="comment_enabled" property="enabled"/>
+    </resultMap>
+
     <select id="selectBySpittleId" parameterType="long" resultType="com.spittr.pojo.Comment">
         SELECT
         <include refid="columns"></include>
@@ -26,5 +37,10 @@
         DELETE FROM comment
         WHERE id=#{commentId} AND username=#{deleteComment}
     </insert>
+    <select id="selectCount" parameterType="long">
+        SELECT COUNT(id)
+        FROM comment
+        WHERE spittle_id=#{spittleId}
+    </select>
 
 </mapper>

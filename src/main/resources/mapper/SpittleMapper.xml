@@ -4,43 +4,83 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spittr.mapper.SpittleMapper">
     <sql id="columns">
-        id,username,text,created_at AS publishTime,attach_type AS attachType,attach_content AS attachContent,repost,comment,"like",enabled
+        id,username,text,created_at AS publishTime,attach_type AS attachType,attach_content AS attachContent,repost,"like",enabled
     </sql>
 
-    <select id="selectAll" resultType="com.spittr.pojo.Spittle">
+    <sql id="spittleDetailColumns">
+      spittle.id AS spittle_id,
+      spittle.username AS spittle_username,
+      spittle.text as spittle_text,
+      spittle.created_at as spittle_created_at,
+      spittle.attach_type AS spittle_attach_type,
+      spittle.attach_content AS spittle_attach_content,
+      spittle.repost as spittle_repost,
+      spittle.like AS spittle_like,
+      spittle.enabled AS spittle_enabled,
+      comment.id AS comment_id,
+      comment.username AS comment_username,
+      comment.commented_id AS comment_commented_id,
+      comment.text AS comment_text,
+      comment.attach_type AS comment_attach_type,
+      comment.attach_content AS comment_attach_content,
+      comment.create_time AS comment_create_time,
+      comment.enabled AS comment_enabled
+    </sql>
+
+    <resultMap id="spittleResultMap" type="com.spittr.pojo.Spittle">
+        <id column="spittle_id" property="id"/>
+        <result column="spittle_username" property="username"/>
+        <result column="spittle_text" property="text"/>
+        <result column="spittle_created_at" property="publishTime"/>
+        <result column="spittle_attach_type" property="attachType"/>
+        <result column="spittle_attach_content" property="attachContent"/>
+        <result column="spittle_repost" property="repost"/>
+        <result column="spittle_enabled" property="enabled"/>
+        <result column="like" property="like"/>
+        <collection property="commentList" ofType="com.spittr.pojo.Comment"
+                    resultMap="com.spittr.mapper.CommentMapper.commentResultMap"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="spittleResultMap">
         SELECT
-        <include refid="columns"></include>
-        FROM spittle
+        <include refid="spittleDetailColumns"/>
+        FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id
     </select>
-    <select id="selectByUsername" resultType="com.spittr.pojo.Spittle">
+
+    <select id="selectOne" resultMap="spittleResultMap">
         SELECT
-        <include refid="columns"></include>
-        FROM spittle
-        WHERE username=#{username}
+        <include refid="spittleDetailColumns"/>
+        FROM spittle,comment
+        WHERE spittle.id=#{id} AND ((comment.spittle_id!=0 AND spittle.id=comment.spittle_id) OR (comment.spittle_id=0))
     </select>
+
+    <select id="selectByUsername" resultMap="spittleResultMap">
+        SELECT
+        <include refid="spittleDetailColumns"/>
+        FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id
+        WHERE 1=1 AND spittle.username=#{username}
+    </select>
+
     <select id="getLatestOne" resultType="com.spittr.pojo.Spittle" parameterType="String">
         SELECT
         <include refid="columns"></include>
-        FROM spittle
-        WHERE username=#{username}
+        FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id
+        WHERE 1=1 AND username=#{username}
         ORDER BY created_at DESC
         LIMIT 1
     </select>
+
     <select id="selectSpittleCountById" parameterType="long" resultType="java.lang.Integer">
         SELECT COUNT(id)
         FROM spittle
         WHERE id=#{id}
     </select>
-    <select id="getSpittleById" parameterType="long" resultType="com.spittr.pojo.Spittle">
-        SELECT
-        <include refid="columns"></include>
-        FROM spittle
-        WHERE id=#{id}
-    </select>
+
     <insert id="insertSpittle" parameterType="com.spittr.pojo.Spittle" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO spittle(username,text,created_at,attach_type,attach_content,enabled)
         VALUES(#{username},#{text},#{publishTime},#{attachType},#{attachContent},#{enabled})
     </insert>
+
     <delete id="deleteSpittleById" parameterType="Long">
         DELETE FROM spittle WHERE id=#{id}
     </delete>
