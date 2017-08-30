@@ -10,4 +10,5 @@ public interface SpitterService {
     Spitter getProfileByUsername(String username);
     void updateEnabledStatus(String username, boolean enabled);
     void updateAvatar(String username, String avatar);
+    boolean validateStringForUsernamePurpose(String text);
 }

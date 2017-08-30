@@ -55,3 +55,24 @@ ALTER TABLE spittr.spittle
 FOREIGN KEY (username) REFERENCES spitter (name) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE spittr.spittle DROP comment;
+
+ALTER TABLE spittr.spittle DROP attach_type, DROP attach_content;
+ALTER TABLE spittr.comment DROP attach_type, DROP attach_content;
+
+CREATE TABLE spittle_attachment(
+  `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'spittle attachment id',
+  `attach_type` INTEGER COMMENT 'attach type',
+  `attach_content` VARCHAR(200) NOT NULL COMMENT 'attach content',
+  `spittle_id` BIGINT NOT NULL COMMENT 'spittle id',
+  PRIMARY KEY (id),
+  FOREIGN KEY (spittle_id) REFERENCES spittle (id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = UTF8 COMMENT = 'spittle attachment table';
+
+CREATE TABLE comment_attachment(
+  `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'comment attachment id',
+  `attach_type` INTEGER COMMENT 'attach type',
+  `attach_content` VARCHAR(200) NOT NULL COMMENT 'attach content',
+  `comment_id` BIGINT NOT NULL COMMENT 'comment id',
+  PRIMARY KEY (id),
+  FOREIGN KEY (comment_id) REFERENCES comment (id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = UTF8 COMMENT = 'comment attachment table';

@@ -1,7 +1,6 @@
 package com.spittr.web;
 
 import com.spittr.annotation.Authorization;
-import com.spittr.enums.AttachmentType;
 import com.spittr.enums.ResponseCode;
 import com.spittr.manager.TokenManager;
 import com.spittr.pojo.BaseResponse;
@@ -57,21 +56,13 @@ public class SpittleController {
     @Authorization
     @RequestMapping(method = RequestMethod.POST)
     public BaseResponse<com.spittr.pojo.Spittle> post(@RequestParam("text") String text,
-                                                      @RequestParam(value = "attachType", required = false) Integer attachType,
-                                                      @RequestParam(value = "attachContent", required = false) String attachContent,
+                                                      @RequestParam(value = "attachment", required = false) String attachment,
                                                       @RequestParam(value = "enabled", required = false) Boolean enabled,
                                                       HttpServletRequest request) {
         String username = tokenManager.getValidUsername(request);
         enabled = enabled == null ? true : enabled;
         com.spittr.pojo.Spittle spittle = new com.spittr.pojo.Spittle(username, text, enabled);
-        if (attachType != null) {
-            AttachmentType attachmentType = AttachmentType.newAttachmentType(attachType);
-            if (attachmentType != AttachmentType.NONE && attachContent.length() > 0) {
-                spittle.setAttachType(attachType);
-                spittle.setAttachContent(attachContent);
-            }
-        }
-        spittleService.saveSpittle(spittle);
+        spittleService.saveSpittle(spittle, attachment);
         spittle = spittleService.getLastestOne(username);
         return new BaseResponse<com.spittr.pojo.Spittle>(spittle);
     }

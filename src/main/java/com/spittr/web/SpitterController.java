@@ -6,7 +6,6 @@ import com.spittr.manager.TokenManager;
 import com.spittr.pojo.BaseResponse;
 import com.spittr.pojo.Spitter;
 import com.spittr.service.SpitterService;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,14 +24,16 @@ public class SpitterController {
     @Autowired
     private TokenManager tokenManager;
 
-    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
-    public BaseResponse<Spitter> getSpitterProfile(@PathVariable String username,
+    @RequestMapping(value = "/{param}", method = RequestMethod.GET)
+    public BaseResponse<Spitter> getSpitterProfile(@PathVariable String param,
                                                    HttpServletRequest request) {
+        param = param.trim();
         Spitter spitter;
-        if (StringUtils.isNumeric(username))
-            spitter = spitterService.getProfileById(username, tokenManager.getValidUsername(request));
-        else
-            spitter = spitterService.getProfileByUsername(username, tokenManager.getValidUsername(request));
+        if (spitterService.validateStringForUsernamePurpose(param)) {
+            spitter = spitterService.getProfileByUsername(param, tokenManager.getValidUsername(request));
+        } else {
+            spitter = spitterService.getProfileById(param, tokenManager.getValidUsername(request));
+        }
         if (spitter == null)
             throw new SpitterNotFoundException();
         return new BaseResponse<Spitter>(spitter, "query profile successfully.");

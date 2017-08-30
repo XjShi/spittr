@@ -6,6 +6,8 @@ import com.spittr.mapper.SpitterMapper;
 import com.spittr.pojo.Spitter;
 import com.spittr.pojo.Spittle;
 import com.spittr.service.SpitterService;
+import io.jsonwebtoken.lang.Assert;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,11 @@ public class SpitterServiceImpl implements SpitterService {
             throw new InvalidParameterException("invalid avatar");
         }
         spitterMapper.updateAvatar(avatar, username);
+    }
+
+    public boolean validateStringForUsernamePurpose(String text) {
+        Assert.notNull(text, "username can't be null.");
+        return text.trim().length() > 0 && !StringUtils.isNumeric(text.trim());
     }
 
     public boolean queryIfExistsByName(String username) {

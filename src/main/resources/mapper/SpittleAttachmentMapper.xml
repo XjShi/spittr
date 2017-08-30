@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spittr.mapper.SpittleAttachmentMapper">
+    <resultMap id="attachmentResultMap" type="com.spittr.pojo.Attachment">
+        <id property="id" column="attachment_id"/>
+        <result property="type" column="attachment_attach_type"/>
+        <result property="content" column="attachment_attach_content"/>
+        <result property="ownerId" column="attachment_spittle_id"/>
+    </resultMap>
+
+    <insert id="insertBatch">
+        INSERT INTO spittle_attachment(attach_type, attach_content, spittle_id)
+        VALUES
+        <foreach collection="list" item="attachment" separator=",">
+            (#{attachment.type},#{attachment.content},#{attachment.ownerId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteOne">
+        DELETE FROM spittle_attachment
+        WHERE spittle_attachment.id=#{id}
+    </delete>
+
+</mapper>

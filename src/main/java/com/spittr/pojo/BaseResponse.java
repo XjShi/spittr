@@ -1,7 +1,9 @@
 package com.spittr.pojo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spittr.enums.ResponseCode;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BaseResponse<T> {
     private int code;
     private String message;

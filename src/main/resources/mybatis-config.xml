@@ -18,6 +18,8 @@
         <mapper resource="./mapper/SpitterMapper.xml"/>
         <mapper resource="./mapper/SpittleMapper.xml"/>
         <mapper resource="./mapper/CommentMapper.xml"/>
+        <mapper resource="./mapper/CommentAttachmentMapper.xml"/>
+        <mapper resource="./mapper/SpittleAttachmentMapper.xml"/>
     </mappers>
     <!--<settings>-->
         <!--<setting name="mapUnderscoreToCamelCase" value="true"/>-->

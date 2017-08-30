@@ -9,7 +9,7 @@ public interface SpitterMapper {
     Integer selectSpitterCountByUsername(@Param("username") String username);
     Spitter selectSpitterByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
     int getCountForAuth(@Param("username") String username, @Param("password") String password);
-    void insertSpitter(Spitter spitter);
-    void updateEnableStatus(Spitter spitter);
-    void updateAvatar(@Param("avatar") String avatar, @Param("username") String username);
+    int insertSpitter(Spitter spitter);
+    int updateEnableStatus(Spitter spitter);
+    int updateAvatar(@Param("avatar") String avatar, @Param("username") String username);
 }

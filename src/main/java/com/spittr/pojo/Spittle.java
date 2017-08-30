@@ -1,35 +1,31 @@
 package com.spittr.pojo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Spittle implements Serializable {
     private static final long serialVersionUID = 1L;    //serialVersionUID
     private Long id;
     private String username;
     private String text;
-    private int attachType;
-    private String attachContent;
     private String repost;  //  json text composed by reposter's username
     private String like;    //  idem
     private boolean enabled;
     private Timestamp publishTime;
     private List<Comment> commentList;
+    private List<Attachment> attachmentList;
 
     public Spittle() {
     }
 
-    public Spittle(String username, String text, int attachType, String attachContent, boolean enabled) {
+    public Spittle(String username, String text, boolean enabled) {
         this.username = username;
         this.text = text;
-        this.attachType = attachType;
-        this.attachContent = attachContent;
         this.enabled = enabled;
-    }
-
-    public Spittle(String username, String text, boolean enabled) {
-        this(username, text, 0, null, enabled);
     }
 
     public Long getId() {
@@ -68,22 +64,6 @@ public class Spittle implements Serializable {
         return serialVersionUID;
     }
 
-    public int getAttachType() {
-        return attachType;
-    }
-
-    public void setAttachType(int attachType) {
-        this.attachType = attachType;
-    }
-
-    public String getAttachContent() {
-        return attachContent;
-    }
-
-    public void setAttachContent(String attachContent) {
-        this.attachContent = attachContent;
-    }
-
     public String getRepost() {
         return repost;
     }
@@ -114,5 +94,13 @@ public class Spittle implements Serializable {
 
     public void setCommentList(List<Comment> commentList) {
         this.commentList = commentList;
+    }
+
+    public List<Attachment> getAttachmentList() {
+        return attachmentList;
+    }
+
+    public void setAttachmentList(List<Attachment> attachmentList) {
+        this.attachmentList = attachmentList;
     }
 }
