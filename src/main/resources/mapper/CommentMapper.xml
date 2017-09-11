@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spittr.mapper.CommentMapper">
     <sql id="columns">
-        id,username,spittle_id AS spittleId,commented_id AS commentedId,text,attach_type AS type,attach_content AS content,create_time AS createTime,enabled
+        id,username,spittle_id AS spittleId,commented_id AS commentedId,text,create_time AS createTime,enabled
     </sql>
 
     <resultMap id="commentResultMap" type="com.spittr.pojo.Comment">

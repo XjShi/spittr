@@ -4,7 +4,6 @@ import com.spittr.exception.InvalidParameterException;
 import com.spittr.exception.spitter.SpitterHasExistException;
 import com.spittr.mapper.SpitterMapper;
 import com.spittr.pojo.Spitter;
-import com.spittr.pojo.Spittle;
 import com.spittr.service.SpitterService;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +29,7 @@ public class SpitterServiceImpl implements SpitterService {
             logger.info("register spitter: " + username + " has exists.");
             throw new SpitterHasExistException();
         }
-        spitterMapper.insertSpitter(spitter);
+        spitterMapper.insertOne(spitter);
     }
 
     public void updateEnabledStatus(String username, boolean enabled) {
@@ -59,17 +58,17 @@ public class SpitterServiceImpl implements SpitterService {
     }
 
     public boolean queryIfExistsByName(String username) {
-        Integer count = spitterMapper.selectSpitterCountByUsername(username);
+        Integer count = spitterMapper.selectCountByUsername(username);
         return count != 0;
     }
 
     public Spitter getProfileById(String id, String validUsername) {
-        Spitter spitter = spitterMapper.selectSpitterById(id);
+        Spitter spitter = spitterMapper.selectById(id);
         return getSafeProfile(spitter, validUsername);
     }
 
     public Spitter getProfileByUsername(String username, String validUsername) {
-        Spitter spitter = spitterMapper.selectSpitterByUsername(username);
+        Spitter spitter = spitterMapper.selectByUsername(username);
         return getSafeProfile(spitter, validUsername);
     }
 
@@ -80,7 +79,7 @@ public class SpitterServiceImpl implements SpitterService {
     }
 
     private Spitter getSafeProfile(Spitter spitter, String validUsername) {
-        if (spitter != null && !validUsername.equals(spitter.getUsername())) {
+        if (spitter != null && (validUsername==null || !validUsername.equals(spitter.getUsername()))) {
             spitter.setPassword(null);
         }
         return spitter;

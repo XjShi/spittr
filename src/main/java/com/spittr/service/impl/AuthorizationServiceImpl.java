@@ -23,7 +23,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         if (username.length() == 0 || password.length() == 0) {
             throw new InvalidParameterException("username or password incorrect.");
         }
-        Spitter spitter = spitterMapper.selectSpitterByUsernameAndPassword(username, password);
+        Spitter spitter = spitterMapper.selectByUsernameAndPassword(username, password);
         if (spitter != null) {
             tokenManager.addToken(username, response);
         } else {

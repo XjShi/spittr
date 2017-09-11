@@ -1,7 +1,6 @@
 package com.spittr.manager;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ public class TokenManager {
         if (token == null) {
             return false;
         }
-        if (username.length() > 0) {
+        if (username != null && username.length() > 0) {
             return true;
         } else {
             response.setHeader(AUTHORIZATION, null);
@@ -61,11 +60,18 @@ public class TokenManager {
     }
 
     public String getUsernameFromToken(String token) {
-        String username = Jwts.parser()
-                .setSigningKey(SECRET)
-                .parseClaimsJws(token.replace(TOKEN_PREFIX, "").trim())
-                .getBody()
-                .getSubject();
+        String username = null;
+        try {
+            username = Jwts.parser()
+                    .setSigningKey(SECRET)
+                    .parseClaimsJws(token.replace(TOKEN_PREFIX, "").trim())
+                    .getBody()
+                    .getSubject();
+        } catch (ExpiredJwtException e) {
+            return null;
+        } catch (SignatureException e) {
+            return null;
+        }
         return username;
     }
 

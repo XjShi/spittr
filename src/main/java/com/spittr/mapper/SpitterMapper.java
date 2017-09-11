@@ -4,12 +4,12 @@ import com.spittr.pojo.Spitter;
 import org.apache.ibatis.annotations.Param;
 
 public interface SpitterMapper {
-    Spitter selectSpitterById(@Param("id") String id);
-    Spitter selectSpitterByUsername(@Param("username") String username);
-    Integer selectSpitterCountByUsername(@Param("username") String username);
-    Spitter selectSpitterByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
+    Spitter selectById(@Param("id") String id);
+    Spitter selectByUsername(@Param("username") String username);
+    Integer selectCountByUsername(@Param("username") String username);
+    Spitter selectByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
     int getCountForAuth(@Param("username") String username, @Param("password") String password);
-    int insertSpitter(Spitter spitter);
+    int insertOne(Spitter spitter);
     int updateEnableStatus(Spitter spitter);
     int updateAvatar(@Param("avatar") String avatar, @Param("username") String username);
 }
