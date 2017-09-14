@@ -7,5 +7,5 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface AuthorizationService {
     Spitter login(String username, String password, HttpServletResponse response);
-    public void logout(String username, HttpServletRequest request, HttpServletResponse response);
+    void logout(String username, HttpServletRequest request, HttpServletResponse response);
 }

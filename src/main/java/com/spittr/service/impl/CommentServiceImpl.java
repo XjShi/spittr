@@ -55,4 +55,8 @@ public class CommentServiceImpl implements CommentService {
         int count = commentMapper.selectCount(spittleId);
         return count;
     }
+
+    public Comment getLatestComment(long spittleId, String username) {
+        return commentMapper.selectLatestOne(spittleId, username);
+    }
 }

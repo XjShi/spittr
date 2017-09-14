@@ -24,14 +24,6 @@ public class SpittleController {
     public static final int DEFAULT_SPITTLES_PER_PAGE = 25;
     private int spittlesPerPage = DEFAULT_SPITTLES_PER_PAGE;
 
-    public int getSpittlesPerPage() {
-        return spittlesPerPage;
-    }
-
-    public void setSpittlesPerPage(int spittlesPerPage) {
-        this.spittlesPerPage = spittlesPerPage;
-    }
-
     @Autowired
     private SpittleService spittleService;
     @Autowired
@@ -78,13 +70,13 @@ public class SpittleController {
 
     @Authorization
     @RequestMapping(value = "/{id}/comment", method = RequestMethod.POST)
-    public BaseResponse<com.spittr.pojo.Spittle> reply(@PathVariable("id") long spittleId,
-                                                       @RequestParam("text") String text,
-                                                       HttpServletRequest request) {
+    public BaseResponse<Comment> reply(@PathVariable("id") long spittleId,
+                                       @RequestParam("text") String text,
+                                       HttpServletRequest request) {
         logger.info("comment spittle[" + spittleId + "]: " + text);
         String username = tokenManager.getValidUsername(request);
         commentService.comment(username, spittleId, text);
-        return new BaseResponse<com.spittr.pojo.Spittle>(null, "comment successfully.");
+        return new BaseResponse<Comment>(commentService.getLatestComment(spittleId, username), "comment successfully.");
     }
 
     @RequestMapping(value = "/{id}/comment", method = RequestMethod.GET)

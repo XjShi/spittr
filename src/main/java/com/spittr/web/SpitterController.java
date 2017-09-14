@@ -8,6 +8,7 @@ import com.spittr.pojo.Spitter;
 import com.spittr.service.SpitterService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,13 @@ public class SpitterController {
     @RequestMapping(value = "/{param}", method = RequestMethod.GET)
     public BaseResponse<Spitter> getSpitterProfile(@PathVariable String param,
                                                    HttpServletRequest request) {
+        try {
+            String s = null;
+            s.length();
+        } catch (Exception e) {
+            throw new DuplicateKeyException("data access exception");
+        }
+
         param = param.trim();
         Spitter spitter;
         if (spitterService.validateStringForUsernamePurpose(param)) {
@@ -49,6 +57,11 @@ public class SpitterController {
         return new BaseResponse<Spitter>(spitter, "spitter " + username + " sign up successfully");
     }
 
+    /**
+     * a spitter request to disable the user account.
+     * @param request
+     * @return
+     */
     @Authorization
     @RequestMapping(value = "/{username}/disable", method = RequestMethod.PATCH)
     public BaseResponse<Spitter> disable(HttpServletRequest request) {
@@ -58,6 +71,12 @@ public class SpitterController {
         return new BaseResponse<Spitter>(spitterService.getProfileByUsername(username),  "disable successfully");
     }
 
+    /**
+     * a spitter request to enable the user account.
+     * A account in disabled status, user can login. But if user want to use it as normal, he must enable the account.
+     * @param username
+     * @return
+     */
     @Authorization
     @RequestMapping(value = "/{username}/enable", method = RequestMethod.PATCH)
     public BaseResponse<Spitter> enable(@PathVariable String username) {
@@ -66,6 +85,12 @@ public class SpitterController {
         return new BaseResponse<Spitter>(spitterService.getProfileByUsername(username), "enable successfully");
     }
 
+    /**
+     * update spitter's avatar.
+     * @param avatar avatar url string.
+     * @param request
+     * @return
+     */
     @Authorization
     @RequestMapping(value = "/{username}/avatar", method = RequestMethod.POST)
     public BaseResponse<Spitter> updateAvatar(@RequestParam("avatar") String avatar, HttpServletRequest request) {

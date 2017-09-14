@@ -9,4 +9,5 @@ public interface CommentService {
     boolean deleteComment(String username, long commentId);
     List<Comment> getComments(long spittleId);
     int getCount(long spittleId);
+    Comment getLatestComment(long spittleId, String username);
 }

@@ -17,7 +17,7 @@ public class AuthorizationController {
     private AuthorizationService authorizationService;
 
     @RequestMapping(method = RequestMethod.POST)
-    public BaseResponse login(@RequestParam("username") String username,
+    public BaseResponse<Spitter> login(@RequestParam("username") String username,
                               @RequestParam("password") String password,
                               HttpServletResponse response) {
         Spitter spitter;
@@ -31,7 +31,7 @@ public class AuthorizationController {
 
     @Authorization
     @RequestMapping(value = "/{username}", method = RequestMethod.DELETE)
-    public BaseResponse logout(@PathVariable("username") String username, HttpServletResponse response) {
+    public BaseResponse<?> logout(@PathVariable("username") String username, HttpServletResponse response) {
         authorizationService.logout(username, null, response);
         return new BaseResponse(null, "logout finished.");
     }

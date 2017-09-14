@@ -14,6 +14,7 @@
       comment.id AS comment_id,
       comment.username AS comment_username,
       comment.commented_id AS comment_commented_id,
+      comment.spittle_id AS commented_spittle_id,
       comment.text AS comment_text,
       comment.create_time AS comment_create_time,
       comment.enabled AS comment_enabled,

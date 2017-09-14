@@ -52,7 +52,7 @@ public class SpittleServiceImpl implements SpittleService {
         if (!this.queryIfUserExistByUsername(spittle.getUsername())) {
             throw new SpitterNotFoundException();
         }
-        if (attachmentText.length() > 0) {
+        if (attachmentText != null && attachmentText.length() > 0) {
             List<Attachment> attachmentList = null;
             try {
                 attachmentList = convertFromJson(attachmentText);

@@ -5,11 +5,19 @@ import com.spittr.exception.spitter.SpitterNotFoundException;
 import com.spittr.exception.transfer.TransferPartErrorException;
 import com.spittr.pojo.BaseResponse;
 import com.spittr.pojo.Spitter;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.sql.SQLException;
 
 @RestControllerAdvice
 public class AppWideExceptionHandler {
+    private final org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @ExceptionHandler(SpitterNotFoundException.class)
     public BaseResponse<Spitter> spitterNotFound(SpitterNotFoundException e) {
         return new BaseResponse<Spitter>(e.getResponseCode().getCode(), "spitter not found", null);
@@ -33,5 +41,19 @@ public class AppWideExceptionHandler {
     @ExceptionHandler(javax.naming.NoPermissionException.class)
     public BaseResponse<Object> noPermission(NoPermissionException e) {
         return new BaseResponse(e.getResponseCode().getCode(), e.getMessage(), null);
+    }
+
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR, reason = "data access error.")
+    @ExceptionHandler({SQLException.class, DataAccessException.class})
+    public BaseResponse<Object> databaseError(Exception e) {
+        logger.error("Exception is: ", e);
+        return null;
+    }
+
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR, reason = "exception occured.")
+    @ExceptionHandler(Exception.class)
+    public BaseResponse<Object> handleError(Exception e) {
+        logger.error("Exception is: ", e);
+        return null;
     }
 }

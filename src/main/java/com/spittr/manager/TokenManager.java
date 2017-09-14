@@ -18,8 +18,8 @@ public class TokenManager {
 
     static final long EXPIRATIONTIME = 1000*60*60*24*1; // 1天
     static final String SECRET = "ThisIsASecret";
-    static final String TOKEN_PREFIX = "Bearer";
-    static final String AUTHORIZATION = "Authorization";
+    public static final String TOKEN_PREFIX = "Bearer";
+    public static final String AUTHORIZATION = "Authorization";
 
     @Autowired
     private RedisTemplate<String, String> redis;

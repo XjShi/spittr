@@ -10,7 +10,7 @@ public class Comment {
     private long commentedId;
     private String text;
     private Timestamp createTime;
-    private boolean enabled;
+    private boolean enabled = true;
     private List<Attachment> attachmentList;
 
     public Comment() {

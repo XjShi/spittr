@@ -40,5 +40,9 @@
         SET avatar=#{avatar}
         WHERE name=#{username}
     </update>
+    <delete id="deleteOne" parameterType="String">
+        DELETE FROM spitter
+        WHERE name=#{username}
+    </delete>
 
 </mapper>

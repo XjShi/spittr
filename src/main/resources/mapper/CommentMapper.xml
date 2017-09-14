@@ -12,10 +12,11 @@
         <id column="comment_username" property="username"/>
         <id column="comment_commented_id" property="commentedId"/>
         <id column="comment_text" property="text"/>
-        <id column="comment_attach_type" property="type"/>
-        <id column="comment_attach_content" property="content"/>
+        <id column="commented_spittle_id" property="spittleId"/>
         <id column="comment_create_time" property="createTime"/>
         <id column="comment_enabled" property="enabled"/>
+        <!--暂不实现评论中带附件-->
+        <!--<collection property="attachmentList" ofType="com.spittr.pojo.Attachment" resultMap=""/>-->
     </resultMap>
 
     <select id="selectBySpittleId" parameterType="long" resultType="com.spittr.pojo.Comment">
@@ -30,17 +31,24 @@
         WHERE id=#{commentId}
     </select>
     <insert id="insertOne" parameterType="com.spittr.pojo.Comment">
-        INSERT INTO comment(username,spittle_id,commented_id,text,attach_type,attach_content,enabled)
-        VALUES(#{username},#{spittleId},#{commentedId},#{text},#{type},#{content},#{enabled})
+        INSERT INTO comment(username,spittle_id,commented_id,text,enabled)
+        VALUES(#{username},#{spittleId},#{commentedId},#{text},#{enabled})
     </insert>
     <insert id="deleteComment">
         DELETE FROM comment
-        WHERE id=#{commentId} AND username=#{deleteComment}
+        WHERE id=#{commentId} AND username=#{username}
     </insert>
     <select id="selectCount" parameterType="long">
         SELECT COUNT(id)
         FROM comment
         WHERE spittle_id=#{spittleId}
+    </select>
+    <select id="selectLatestOne" resultType="com.spittr.pojo.Comment">
+        SELECT <include refid="columns"/>
+        FROM comment
+        WHERE username=#{username} AND spittle_id=#{spittleId}
+        ORDER BY create_time DESC
+        LIMIT 1
     </select>
 
 </mapper>

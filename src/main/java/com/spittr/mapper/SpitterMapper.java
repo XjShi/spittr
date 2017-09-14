@@ -12,4 +12,5 @@ public interface SpitterMapper {
     int insertOne(Spitter spitter);
     int updateEnableStatus(Spitter spitter);
     int updateAvatar(@Param("avatar") String avatar, @Param("username") String username);
+    int deleteOne(@Param("username") String username);
 }

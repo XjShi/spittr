@@ -11,4 +11,5 @@ public interface CommentMapper {
     List<Comment> selectBySpittleId(@Param("spittleId") long spittleId);
     int selectCommentCountByCommentId(@Param("commentId") long commentId);
     int selectCount(@Param("spittleId") long spittleId);
+    Comment selectLatestOne(@Param("spittleId") long spittleId, @Param("username") String username);
 }
