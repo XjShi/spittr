@@ -56,9 +56,7 @@ public class SpitterControllerTest extends BaseTest {
 
     @Test
     public void getSpitterProfile() throws Exception {
-        SpitterController controller = new SpitterController();
-//        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-        mockMvc.perform(get("/spitter/elgae"))
+        mockMvc.perform(get("/spitter/{param}", "elgae"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.code").value(0))

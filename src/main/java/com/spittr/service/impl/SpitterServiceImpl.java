@@ -20,7 +20,7 @@ public class SpitterServiceImpl implements SpitterService {
     @Autowired
     private SpitterMapper spitterMapper;
 
-    public void save(Spitter spitter) {
+    public boolean save(Spitter spitter) {
         if (spitter.getUsername().length() == 0 || spitter.getPassword().length() == 0) {
             throw new InvalidParameterException("invalid username or password");
         }
@@ -29,7 +29,7 @@ public class SpitterServiceImpl implements SpitterService {
             logger.info("register spitter: " + username + " has exists.");
             throw new SpitterHasExistException();
         }
-        spitterMapper.insertOne(spitter);
+        return spitterMapper.insertOne(spitter) > 0;
     }
 
     public void updateEnabledStatus(String username, boolean enabled) {

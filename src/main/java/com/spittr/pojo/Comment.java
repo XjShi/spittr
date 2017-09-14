@@ -79,4 +79,18 @@ public class Comment {
     public void setAttachmentList(List<Attachment> attachmentList) {
         this.attachmentList = attachmentList;
     }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", spittleId=" + spittleId +
+                ", commentedId=" + commentedId +
+                ", text='" + text + '\'' +
+                ", createTime=" + createTime +
+                ", enabled=" + enabled +
+                ", attachmentList=" + attachmentList +
+                '}';
+    }
 }

@@ -3,7 +3,7 @@ package com.spittr.service;
 import com.spittr.pojo.Spitter;
 
 public interface SpitterService {
-    void save(Spitter spitter);
+    boolean save(Spitter spitter);
     boolean queryIfExistsByName(String username);
     Spitter getProfileById(String id, String validUsername);
     Spitter getProfileByUsername(String username, String validUsername);

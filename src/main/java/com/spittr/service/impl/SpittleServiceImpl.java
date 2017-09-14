@@ -43,7 +43,6 @@ public class SpittleServiceImpl implements SpittleService {
         return spittles;
     }
 
-    //todo
     public Spittle getSpittleDetail(long spittleId) {
         return spittleMapper.selectOne(spittleId);
     }

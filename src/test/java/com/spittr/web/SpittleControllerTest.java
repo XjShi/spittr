@@ -32,7 +32,6 @@ public class SpittleControllerTest extends BaseTest {
                 .andDo(print());
     }
 
-    //todo:auth
     @Test
     public void post() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/spittle").param("text", spittleText).header(AUTHORIZATION, token))
@@ -40,16 +39,13 @@ public class SpittleControllerTest extends BaseTest {
                 .andExpect(jsonPath("$.data.text").value(spittleText));
     }
 
-    //todo:auth
     @Test
     public void delete() throws Exception {
-        //todo
         mockMvc.perform(MockMvcRequestBuilders.delete("/spittle/{id}", 18).header(AUTHORIZATION, token))
                 .andDo(print())
                 .andExpect(jsonPath("$.code").value(0));
     }
 
-    //todo:auth
     @Test
     public void reply() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/spittle/{id}/comment", commentedSpittleId).header(AUTHORIZATION, token)
@@ -67,7 +63,6 @@ public class SpittleControllerTest extends BaseTest {
                 .andExpect(jsonPath("$.data").isArray());
     }
 
-    //todo:auth
     @Test
     public void deleteComment() throws Exception {
         mockMvc.perform((MockMvcRequestBuilders.delete("/spittle/{id}/comment/{commentId}", 18, 35))

@@ -103,4 +103,19 @@ public class Spittle implements Serializable {
     public void setAttachmentList(List<Attachment> attachmentList) {
         this.attachmentList = attachmentList;
     }
+
+    @Override
+    public String toString() {
+        return "Spittle{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", text='" + text + '\'' +
+                ", repost='" + repost + '\'' +
+                ", like='" + like + '\'' +
+                ", enabled=" + enabled +
+                ", publishTime=" + publishTime +
+                ", commentList=" + commentList +
+                ", attachmentList=" + attachmentList +
+                '}';
+    }
 }

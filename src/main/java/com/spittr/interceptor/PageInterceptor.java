@@ -22,7 +22,6 @@ import java.util.Properties;
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
 public class PageInterceptor implements Interceptor {
     public Object intercept(Invocation invocation) throws Throwable {
-        System.out.println(invocation.getTarget());
         StatementHandler statementHandler = (StatementHandler) invocation.getTarget();
         MetaObject metaObject = MetaObject.forObject(statementHandler, SystemMetaObject.DEFAULT_OBJECT_FACTORY,
                 SystemMetaObject.DEFAULT_OBJECT_WRAPPER_FACTORY, new DefaultReflectorFactory());

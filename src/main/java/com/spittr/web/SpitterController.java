@@ -8,7 +8,6 @@ import com.spittr.pojo.Spitter;
 import com.spittr.service.SpitterService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,13 +27,6 @@ public class SpitterController {
     @RequestMapping(value = "/{param}", method = RequestMethod.GET)
     public BaseResponse<Spitter> getSpitterProfile(@PathVariable String param,
                                                    HttpServletRequest request) {
-        try {
-            String s = null;
-            s.length();
-        } catch (Exception e) {
-            throw new DuplicateKeyException("data access exception");
-        }
-
         param = param.trim();
         Spitter spitter;
         if (spitterService.validateStringForUsernamePurpose(param)) {
