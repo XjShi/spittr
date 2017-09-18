@@ -1,7 +1,10 @@
 package com.spittr.pojo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.sql.Timestamp;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Comment {
     private long id;
     private String username;
