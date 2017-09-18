@@ -14,10 +14,10 @@ public class Spittle implements Serializable {
     private String text;
     private String repost;  //  json text composed by reposter's username
     private String like;    //  idem
+    private String attachment;
     private boolean enabled;
     private Timestamp publishTime;
     private List<Comment> commentList;
-    private List<Attachment> attachmentList;
 
     public Spittle() {
     }
@@ -96,12 +96,12 @@ public class Spittle implements Serializable {
         this.commentList = commentList;
     }
 
-    public List<Attachment> getAttachmentList() {
-        return attachmentList;
+    public String getAttachment() {
+        return attachment;
     }
 
-    public void setAttachmentList(List<Attachment> attachmentList) {
-        this.attachmentList = attachmentList;
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
     }
 
     @Override
@@ -115,7 +115,7 @@ public class Spittle implements Serializable {
                 ", enabled=" + enabled +
                 ", publishTime=" + publishTime +
                 ", commentList=" + commentList +
-                ", attachmentList=" + attachmentList +
+                ", attachment=" + attachment +
                 '}';
     }
 }

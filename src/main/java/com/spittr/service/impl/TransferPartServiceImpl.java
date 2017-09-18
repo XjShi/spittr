@@ -7,6 +7,11 @@ import com.spittr.service.TransferPartService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileSystemUtils;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Part;
@@ -15,18 +20,22 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
+@PropertySource("classpath:application.properties")
 public class TransferPartServiceImpl implements TransferPartService {
-    private final String basePath = "/Users/xjshi/Downloads/tmp/";
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private Environment env;
 
     public File transfer(Part part) {
         if (!checkFreeSpace(part.getSize())) {
             throw new TransferPartErrorException();
         }
-        String fileName = DigestUtils.md5Hex(part.getSubmittedFileName());
+        String fileName = getHashedFilename(part.getSubmittedFileName());
         AttachmentType type = getAttachmentType(part.getContentType());
         String subDirName = getSubDirName(type).toLowerCase();
-        String subDirPath = basePath + subDirName;
+        String subDirPath = getBasePath() + subDirName;
         ensureDirectoryExists(subDirPath);
+        logger.info("upload file subDirPath: " + subDirPath);
 
         try {
             part.write(subDirPath + "/" + fileName);
@@ -38,10 +47,10 @@ public class TransferPartServiceImpl implements TransferPartService {
 
     public void download(OutputStream outputStream, AttachmentType type, String filename) {
         String subDirName = getSubDirName(type);
-        String fullPath = basePath + subDirName + "/" + filename;
+        String fullPath = getBasePath() + subDirName + "/" + filename;
         java.io.File file = new java.io.File(fullPath);
         if (!file.exists()) {
-            return;
+            throw new RuntimeException("file not found: " + filename);
         }
         BufferedInputStream inputStream = null;
         try {
@@ -51,15 +60,15 @@ public class TransferPartServiceImpl implements TransferPartService {
                 outputStream.write(buffer);
             }
         } catch (FileNotFoundException e) {
-
+            throw new RuntimeException("file not found: " + filename);
         } catch (IOException e) {
-
+            throw new RuntimeException("io error: " + e.getMessage());
         } finally {
             try {
                 if (inputStream != null)
                     inputStream.close();
             } catch (IOException e) {
-
+                throw new RuntimeException();
             }
         }
     }
@@ -74,8 +83,18 @@ public class TransferPartServiceImpl implements TransferPartService {
         return freeSpace - fileSize > FileUtils.ONE_MB;
     }
 
+    private String getHashedFilename(String originalFilename) {
+        String[] comp = originalFilename.split("\\.");
+        String name = DigestUtils.md5Hex(comp[0]);
+        String extension = "";
+        if (comp.length >= 2) {
+            extension = "." + comp[1];
+        }
+        return name + extension;
+    }
+
     private String getSubDirName(AttachmentType attachmentType) {
-        return attachmentType.name();
+        return attachmentType.name().toLowerCase();
     }
 
     private AttachmentType getAttachmentType(String contentType) {
@@ -91,5 +110,9 @@ public class TransferPartServiceImpl implements TransferPartService {
             return file.mkdir();
         }
         return true;
+    }
+
+    private String getBasePath() {
+        return env.getProperty("uploadfile.path");
     }
 }

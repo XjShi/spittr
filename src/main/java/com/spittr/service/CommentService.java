@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface CommentService {
     Comment comment(String username, long spittleId, String text);
+    Comment comment(Comment comment);
     boolean deleteComment(String username, long commentId);
     List<Comment> getComments(long spittleId);
     int getCount(long spittleId);

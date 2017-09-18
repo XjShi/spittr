@@ -34,7 +34,7 @@ public class TransferController {
         }
     }
 
-    @RequestMapping(value = "/download/{filetype}/{filename}", method = RequestMethod.GET)
+    @RequestMapping(value = "/download/{filetype}/{filename:[a-z0-9]+\\.[a-z]+}", method = RequestMethod.GET)
     public StreamingResponseBody download(@PathVariable("filetype") final int filetype,
                                           @PathVariable("filename") final String filename) {
         logger.info("download: " + filetype + " " + filename);

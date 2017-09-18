@@ -32,6 +32,7 @@ public class TokenManager {
                 .compact();
         jwt = TOKEN_PREFIX + " " + jwt;
         response.addHeader(AUTHORIZATION,  jwt);
+        logger.info("authorization for [" + username + "] is " + jwt);
         redis.boundValueOps(username).set(jwt, EXPIRATIONTIME, TimeUnit.MILLISECONDS);
     }
 
@@ -57,6 +58,7 @@ public class TokenManager {
     public void invalidate(String username, HttpServletResponse response) {
         redis.delete(username);
         response.setHeader(AUTHORIZATION, null);
+        logger.info("delete authorization for [" + username + "].");
     }
 
     public String getUsernameFromToken(String token) {

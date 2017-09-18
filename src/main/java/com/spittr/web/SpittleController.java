@@ -4,7 +4,6 @@ import com.spittr.annotation.Authorization;
 import com.spittr.enums.ResponseCode;
 import com.spittr.manager.TokenManager;
 import com.spittr.pojo.BaseResponse;
-import com.spittr.pojo.Comment;
 import com.spittr.pojo.Spittle;
 import com.spittr.service.CommentService;
 import com.spittr.service.SpittleService;
@@ -54,7 +53,8 @@ public class SpittleController {
         String username = tokenManager.getValidUsername(request);
         enabled = enabled == null ? true : enabled;
         com.spittr.pojo.Spittle spittle = new com.spittr.pojo.Spittle(username, text, enabled);
-        spittleService.saveSpittle(spittle, attachment);
+        spittle.setAttachment(attachment);
+        spittleService.saveSpittle(spittle);
         spittle = spittleService.getLastestOne(username);
         return new BaseResponse<com.spittr.pojo.Spittle>(spittle);
     }
@@ -66,34 +66,5 @@ public class SpittleController {
         String username = tokenManager.getValidUsername(request);
         spittleService.deleteSpittle(username, id);
         return new BaseResponse<com.spittr.pojo.Spittle>(null, "delete spittle successfully");
-    }
-
-    @Authorization
-    @RequestMapping(value = "/{id}/comment", method = RequestMethod.POST)
-    public BaseResponse<Comment> reply(@PathVariable("id") long spittleId,
-                                       @RequestParam("text") String text,
-                                       HttpServletRequest request) {
-        logger.info("comment spittle[" + spittleId + "]: " + text);
-        String username = tokenManager.getValidUsername(request);
-        commentService.comment(username, spittleId, text);
-        return new BaseResponse<Comment>(commentService.getLatestComment(spittleId, username), "comment successfully.");
-    }
-
-    @RequestMapping(value = "/{id}/comment", method = RequestMethod.GET)
-    public BaseResponse<List<Comment>> show(@PathVariable("id") long spittleId) {
-        logger.info("get all comments of spittle[" + spittleId + "].");
-        List<Comment> comments = commentService.getComments(spittleId);
-        return new BaseResponse<List<Comment>>(comments, "get comments successfully.");
-    }
-
-    @Authorization
-    @RequestMapping(value = "/{id}/comment/{commentId}", method = RequestMethod.DELETE)
-    public BaseResponse deleteComment(@PathVariable("id") long id,
-                                      @PathVariable("commentId") long commentId,
-                                      HttpServletRequest request) {
-        logger.info("delete comment[" + commentId + "] of spittle[" + id + "].");
-        String username = tokenManager.getValidUsername(request);
-        commentService.deleteComment(username, commentId);
-        return new BaseResponse(null, "delete comment successfully.");
     }
 }

@@ -76,3 +76,9 @@ CREATE TABLE comment_attachment(
   PRIMARY KEY (id),
   FOREIGN KEY (comment_id) REFERENCES comment (id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = UTF8 COMMENT = 'comment attachment table';
+
+ALTER TABLE spittle ADD COLUMN attachment TEXT DEFAULT NULL COMMENT 'attachments text';
+ALTER TABLE spittr.comment ADD attachment TEXT DEFAULT NULL COMMENT 'attachments text';
+
+DROP TABLE spittr.comment_attachment;
+DROP TABLE spittr.spittle_attachment;

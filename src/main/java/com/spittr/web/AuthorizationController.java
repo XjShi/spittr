@@ -18,8 +18,8 @@ public class AuthorizationController {
 
     @RequestMapping(method = RequestMethod.POST)
     public BaseResponse<Spitter> login(@RequestParam("username") String username,
-                              @RequestParam("password") String password,
-                              HttpServletResponse response) {
+                                       @RequestParam("password") String password,
+                                       HttpServletResponse response) {
         Spitter spitter;
         try {
             spitter = authorizationService.login(username, password, response);

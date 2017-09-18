@@ -1,13 +1,12 @@
 package com.spittr.config;
 
 import com.spittr.service.SpitterService;
-import org.springframework.context.annotation.Bean;
 import org.springframework.remoting.rmi.RmiProxyFactoryBean;
 import org.springframework.remoting.rmi.RmiServiceExporter;
 
 //@Configuration
 public class RmiConfig {
-    @Bean
+//    @Bean
     public RmiServiceExporter rmiExporter(SpitterService spitterService) {
         RmiServiceExporter rmiExporter = new RmiServiceExporter();
         rmiExporter.setService(spitterService);
@@ -19,7 +18,7 @@ public class RmiConfig {
     }
 
     //RMI客户端
-    @Bean
+//    @Bean
     public RmiProxyFactoryBean spitterService() {
         RmiProxyFactoryBean rmiProxy = new RmiProxyFactoryBean();
         rmiProxy.setServiceUrl("rmi://localhost/SpitterService");

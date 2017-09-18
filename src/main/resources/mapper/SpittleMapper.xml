@@ -11,6 +11,7 @@
       spittle.repost as spittle_repost,
       spittle.like AS spittle_like,
       spittle.enabled AS spittle_enabled,
+      spittle.attachment AS spittle_attachment,
       comment.id AS comment_id,
       comment.username AS comment_username,
       comment.commented_id AS comment_commented_id,
@@ -18,10 +19,7 @@
       comment.text AS comment_text,
       comment.create_time AS comment_create_time,
       comment.enabled AS comment_enabled,
-      spittle_attachment.id AS attachment_id,
-      spittle_attachment.attach_type AS attachment_attach_type,
-      spittle_attachment.attach_content AS attachment_attach_content,
-      spittle_attachment.spittle_id AS attachment_spittle_id
+      comment.attachment AS comment_attachment
     </sql>
 
     <resultMap id="spittleResultMap" type="com.spittr.pojo.Spittle">
@@ -31,25 +29,22 @@
         <result column="spittle_created_at" property="publishTime"/>
         <result column="spittle_repost" property="repost"/>
         <result column="spittle_enabled" property="enabled"/>
+        <result column="spittle_attachment" property="attachment"/>
         <result column="like" property="like"/>
         <collection property="commentList" ofType="com.spittr.pojo.Comment"
                     resultMap="com.spittr.mapper.CommentMapper.commentResultMap"/>
-        <collection property="attachmentList" ofType="com.spittr.pojo.Attachment"
-                    resultMap="com.spittr.mapper.SpittleAttachmentMapper.attachmentResultMap"/>
     </resultMap>
 
     <select id="selectAll" resultMap="spittleResultMap">
         SELECT
         <include refid="spittleDetailColumns"/>
         FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id
-        LEFT JOIN spittle_attachment ON spittle.id = spittle_attachment.spittle_id
     </select>
 
     <select id="selectOne" resultMap="spittleResultMap" parameterType="long">
         SELECT
         <include refid="spittleDetailColumns"/>
         FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id
-        LEFT JOIN spittle_attachment ON spittle.id = spittle_attachment.spittle_id
         WHERE 1=1 AND spittle.id=#{id}
     </select>
 
@@ -57,7 +52,6 @@
         SELECT
         <include refid="spittleDetailColumns"/>
         FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id
-        LEFT JOIN spittle_attachment ON spittle.id = spittle_attachment.spittle_id
         WHERE 1=1 AND spittle.username=#{username}
     </select>
 
@@ -65,7 +59,6 @@
         SELECT
         <include refid="spittleDetailColumns"></include>
         FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id
-        LEFT JOIN spittle_attachment ON spittle.id = spittle_attachment.spittle_id
         WHERE 1=1 AND spittle.username=#{username}
         ORDER BY created_at DESC
         LIMIT 1
@@ -78,8 +71,8 @@
     </select>
 
     <insert id="insertSpittle" parameterType="com.spittr.pojo.Spittle" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO spittle(username,text,created_at,enabled)
-        VALUES(#{username},#{text},#{publishTime},#{enabled})
+        INSERT INTO spittle(username,text,attachment,created_at,enabled)
+        VALUES(#{username},#{text},#{attachment},#{publishTime},#{enabled})
     </insert>
 
     <delete id="deleteSpittleById" parameterType="Long">

@@ -20,16 +20,21 @@ public class CommentServiceImpl implements CommentService {
     private SpittleService spittleService;
 
     public Comment comment(String username, long spittleId, String text) {
-        boolean exists = spittleService.queryIfExistById(spittleId);
-        if (!exists) {
-            throw new InvalidParameterException("spittle[" + spittleId + "] doesn't exists.");
-        }
         Comment comment = new Comment();
         comment.setText(text);
         comment.setSpittleId(spittleId);
         comment.setUsername(username);
+        return comment(comment);
+    }
+
+    @Override
+    public Comment comment(Comment comment) {
+        boolean exists = spittleService.queryIfExistById(comment.getSpittleId());
+        if (!exists) {
+            throw new InvalidParameterException("spittle[" + comment.getSpittleId() + "] doesn't exists.");
+        }
         commentMapper.insertOne(comment);
-        return getLatestComment(spittleId, username);
+        return getLatestComment(comment.getSpittleId(), comment.getUsername());
     }
 
     public boolean queryIfCommentExistsById(long commentId) {

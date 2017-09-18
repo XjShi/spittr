@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spittr.mapper.CommentMapper">
     <sql id="columns">
-        id,username,spittle_id AS spittleId,commented_id AS commentedId,text,create_time AS createTime,enabled
+        id,username,spittle_id AS spittleId,commented_id AS commentedId,text,create_time AS createTime,enabled,attachment
     </sql>
 
     <resultMap id="commentResultMap" type="com.spittr.pojo.Comment">
@@ -15,8 +15,7 @@
         <id column="commented_spittle_id" property="spittleId"/>
         <id column="comment_create_time" property="createTime"/>
         <id column="comment_enabled" property="enabled"/>
-        <!--暂不实现评论中带附件-->
-        <!--<collection property="attachmentList" ofType="com.spittr.pojo.Attachment" resultMap=""/>-->
+        <id column="comment_attachment" property="attachment"/>
     </resultMap>
 
     <select id="selectBySpittleId" parameterType="long" resultType="com.spittr.pojo.Comment">
@@ -31,8 +30,8 @@
         WHERE id=#{commentId}
     </select>
     <insert id="insertOne" parameterType="com.spittr.pojo.Comment">
-        INSERT INTO comment(username,spittle_id,commented_id,text,enabled)
-        VALUES(#{username},#{spittleId},#{commentedId},#{text},#{enabled})
+        INSERT INTO comment(username,spittle_id,commented_id,text,enabled,attachment)
+        VALUES(#{username},#{spittleId},#{commentedId},#{text},#{enabled},#{attachment})
     </insert>
     <insert id="deleteComment">
         DELETE FROM comment

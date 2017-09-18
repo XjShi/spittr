@@ -50,7 +50,7 @@ public class AppWideExceptionHandler {
         return null;
     }
 
-    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR, reason = "exception occured.")
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public BaseResponse<Object> handleError(Exception e) {
         logger.error("Exception is: ", e);

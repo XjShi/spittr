@@ -1,7 +1,6 @@
 package com.spittr.pojo;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 public class Comment {
     private long id;
@@ -11,9 +10,16 @@ public class Comment {
     private String text;
     private Timestamp createTime;
     private boolean enabled = true;
-    private List<Attachment> attachmentList;
+    private String attachment;
 
     public Comment() {
+    }
+
+    public Comment(String username, long spittleId, String text, String attachment) {
+        this.username = username;
+        this.spittleId = spittleId;
+        this.text = text;
+        this.attachment = attachment;
     }
 
     public long getId() {
@@ -72,12 +78,12 @@ public class Comment {
         this.enabled = enabled;
     }
 
-    public List<Attachment> getAttachmentList() {
-        return attachmentList;
+    public String getAttachment() {
+        return attachment;
     }
 
-    public void setAttachmentList(List<Attachment> attachmentList) {
-        this.attachmentList = attachmentList;
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
     }
 
     @Override
@@ -90,7 +96,7 @@ public class Comment {
                 ", text='" + text + '\'' +
                 ", createTime=" + createTime +
                 ", enabled=" + enabled +
-                ", attachmentList=" + attachmentList +
+                ", attachment=" + attachment +
                 '}';
     }
 }

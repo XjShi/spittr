@@ -1,23 +1,16 @@
 package com.spittr.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.spittr.exception.InvalidParameterException;
 import com.spittr.exception.NoPermissionException;
 import com.spittr.exception.spitter.SpitterNotFoundException;
 import com.spittr.mapper.SpittleMapper;
-import com.spittr.pojo.Attachment;
 import com.spittr.pojo.Spittle;
-import com.spittr.service.AttachmentService;
 import com.spittr.service.CommentService;
 import com.spittr.service.SpitterService;
 import com.spittr.service.SpittleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,8 +21,6 @@ public class SpittleServiceImpl implements SpittleService {
     private SpitterService spitterService;
     @Autowired
     private CommentService commentService;
-    @Autowired
-    private AttachmentService attachmentService;
 
     public List<Spittle> getList() {
         return spittleMapper.selectAll();
@@ -47,18 +38,9 @@ public class SpittleServiceImpl implements SpittleService {
         return spittleMapper.selectOne(spittleId);
     }
 
-    public Spittle saveSpittle(Spittle spittle, String attachmentText) {
+    public Spittle saveSpittle(Spittle spittle) {
         if (!this.queryIfUserExistByUsername(spittle.getUsername())) {
             throw new SpitterNotFoundException();
-        }
-        if (attachmentText != null && attachmentText.length() > 0) {
-            List<Attachment> attachmentList = null;
-            try {
-                attachmentList = convertFromJson(attachmentText);
-            } catch (IOException e) {
-                throw new InvalidParameterException("attachment json string error.");
-            }
-            attachmentService.save(attachmentList);
         }
         spittleMapper.insertSpittle(spittle);
         return spittle;
@@ -90,13 +72,5 @@ public class SpittleServiceImpl implements SpittleService {
     public boolean isSpitterHasChangePermission(String username, long id) {
         Spittle spittle = spittleMapper.selectOne(id);
         return spittle.getUsername().equals(username);
-    }
-
-    private List<Attachment> convertFromJson(String json) throws IOException {
-        Assert.hasLength(json, "json string doesn't have length.");
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        List<Attachment> attachments = mapper.readValue(json, List.class);
-        return attachments;
     }
 }

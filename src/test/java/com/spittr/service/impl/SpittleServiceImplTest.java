@@ -46,14 +46,13 @@ public class SpittleServiceImplTest {
         Spittle spittle = spittleService.getSpittleDetail(3);
         assertEquals(3, spittle.getId().longValue());
         assertTrue(spittle.getCommentList() instanceof List);
-        assertTrue(spittle.getAttachmentList() instanceof List);
     }
 
     @Test
     public void saveSpittle() throws Exception {
         String spittleText = "spittle from unit test.";
         Spittle spittle = new Spittle("shixj", "spittle from unit test.", true);
-        spittle = spittleService.saveSpittle(spittle, null);
+        spittle = spittleService.saveSpittle(spittle);
         assertEquals(spittleText, spittle.getText());
     }
 
