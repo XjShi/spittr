@@ -19,8 +19,6 @@ public class SpittleServiceImpl implements SpittleService {
     private SpittleMapper spittleMapper;
     @Autowired
     private SpitterService spitterService;
-    @Autowired
-    private CommentService commentService;
 
     public List<Spittle> getList() {
         return spittleMapper.selectAll();

@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.servlet.http.Part;
-import java.io.IOException;
-import java.io.OutputStream;
 
 @RestController
 public class TransferController {
@@ -38,10 +36,6 @@ public class TransferController {
     public StreamingResponseBody download(@PathVariable("filetype") final int filetype,
                                           @PathVariable("filename") final String filename) {
         logger.info("download: " + filetype + " " + filename);
-        return new StreamingResponseBody() {
-            public void writeTo(OutputStream outputStream) throws IOException {
-                transferPartService.download(outputStream, AttachmentType.newAttachmentType(filetype), filename);
-            }
-        };
+        return outputStream -> transferPartService.download(outputStream, AttachmentType.newAttachmentType(filetype), filename);
     }
 }
