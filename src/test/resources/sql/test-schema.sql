@@ -62,28 +62,7 @@ ALTER TABLE spittle
 ALTER TABLE comment
     DROP attach_content;
 
-CREATE TABLE spittle_attachment (
-  id             BIGINT       NOT NULL IDENTITY,
-  attach_type    INTEGER,
-  attach_content VARCHAR(200) NOT NULL,
-  spittle_id     BIGINT       NOT NULL,
-  FOREIGN KEY (spittle_id) REFERENCES spittle (id)
-    ON DELETE CASCADE
-);
-
-CREATE TABLE comment_attachment (
-  id             BIGINT       NOT NULL IDENTITY,
-  attach_type    INTEGER,
-  attach_content VARCHAR(200) NOT NULL,
-  comment_id     BIGINT       NOT NULL,
-  FOREIGN KEY (comment_id) REFERENCES comment (id)
-    ON DELETE CASCADE
-);
-
 ALTER TABLE spittle
   ADD COLUMN attachment VARCHAR(1024) DEFAULT NULL;
 ALTER TABLE comment
   ADD attachment VARCHAR(1024) DEFAULT NULL;
-
-DROP TABLE comment_attachment;
-DROP TABLE spittle_attachment;

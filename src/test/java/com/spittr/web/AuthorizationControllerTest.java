@@ -5,8 +5,6 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultHandler;
 
 import static com.spittr.enums.ResponseCode.AUTHORIZATION_REQUIRED;
 import static com.spittr.manager.TokenManager.AUTHORIZATION;
@@ -20,8 +18,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by xjshi.
  */
 public class AuthorizationControllerTest extends BaseTest {
-    private String username = "test";
-    private String password = "test_password";
+    private String username = "elgae";
+    private String password = "elgae_password";
     private static String token;
 
     @Before
@@ -54,11 +52,9 @@ public class AuthorizationControllerTest extends BaseTest {
 
                     }
                 }))
-                .andDo(new ResultHandler() {
-                    public void handle(MvcResult mvcResult) throws Exception {
-                        token = mvcResult.getResponse().getHeader(AUTHORIZATION);
-                        System.out.println("login produce token : " + token);
-                    }
+                .andDo(mvcResult -> {
+                    token = mvcResult.getResponse().getHeader(AUTHORIZATION);
+                    System.out.println("login produce token : " + token);
                 })
                 .andDo(print());
     }

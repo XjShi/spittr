@@ -14,9 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class SpittleControllerTest extends BaseTest {
     private final String username = "shixj";
     private final String spittleText = "I come from spring test";
-    private final long commentedSpittleId = 18;
+    private final long commentedSpittleId = 22;
     private final String commentContent = "comment from spring test";
-    private final String token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlbGdhZSIsImV4cCI6MTUwNTQ1MTczM30.twd5kmH6AFPtWI93dp40hcWsZQM0iWgQoubHZH-PrDAq3Dx9z3b7HzTiALudd1dUsWpsQLn-Se1dgrJRQXuyxQ";
+    private final String token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlbGdhZSIsImV4cCI6MTUwNjY4MjczNX0.6TNoADUFricb_BQHdT7BL3lwVWAZ59Q-2hPyZytT9hYh-jAhCNbjJsCOvi3IHWkRqRFH4atBzBt03c1VX6kxrg";
 
     @Test
     public void show() throws Exception {
@@ -41,7 +41,7 @@ public class SpittleControllerTest extends BaseTest {
 
     @Test
     public void delete() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/spittle/{id}", 18).header(AUTHORIZATION, token))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/spittle/{id}", 24).header(AUTHORIZATION, token))
                 .andDo(print())
                 .andExpect(jsonPath("$.code").value(0));
     }

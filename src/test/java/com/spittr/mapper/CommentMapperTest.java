@@ -2,7 +2,6 @@ package com.spittr.mapper;
 
 import com.spittr.config.RootConfig;
 import com.spittr.pojo.Comment;
-import com.spittr.pojo.Spittle;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +15,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
-import java.util.List;
 
 /**
  * Created by xjshi.

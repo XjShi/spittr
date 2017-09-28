@@ -4,7 +4,6 @@ import com.spittr.config.RootConfig;
 import com.spittr.pojo.Spittle;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,8 @@ import java.util.List;
 
 /**
  * Created by xjshi.
+ * 由于 LIKE 在SQL中是保留字，而在hsql中保留字用作列名时必须使用双引号扩起来，而mysql不能正确处理使用双引号扩起来的列名。
+ * 完美的方案应该是修改表的列名，不过因为懒，我就不改了。如果你在进行测试时发现提示sql语法错误，可以据此进行相应更改。
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {RootConfig.class})
