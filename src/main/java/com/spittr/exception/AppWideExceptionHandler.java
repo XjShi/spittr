@@ -43,7 +43,7 @@ public class AppWideExceptionHandler {
         return new BaseResponse(e.getResponseCode().getCode(), e.getMessage(), null);
     }
 
-    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR, reason = "data access error.")
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({SQLException.class, DataAccessException.class})
     public BaseResponse<Object> databaseError(Exception e) {
         logger.error("Exception is: ", e);

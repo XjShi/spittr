@@ -27,8 +27,8 @@
         WHERE name=#{username} AND password=#{password}
     </select>
     <insert id="insertOne" parameterType="com.spittr.pojo.Spitter" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO spitter(name,password,avatar,created_at,enabled)
-        VALUES (#{username},#{password},#{avatar},#{registrationDate},#{enabled})
+        INSERT INTO spitter(name,password,avatar,enabled)
+        VALUES (#{username},#{password},#{avatar},#{enabled})
     </insert>
     <update id="updateEnableStatus" parameterType="com.spittr.pojo.Spitter">
         UPDATE spitter

@@ -72,17 +72,4 @@ public class SpitterControllerTest extends BaseTest {
                 .andExpect(jsonPath("$.data.username").value(username))
                 .andExpect(jsonPath("$.data.password").value(password));
     }
-
-//    @Test
-//    public void disable() throws Exception {
-//    }
-
-//    @Test
-//    public void enable() throws Exception {
-//    }
-//
-//    @Test
-//    public void updateAvatar() throws Exception {
-//    }
-
 }

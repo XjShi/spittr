@@ -30,7 +30,7 @@ CREATE TABLE spittle(
 
 CREATE TABLE comment(
   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'comment id',
-  `username` BIGINT NOT NULL COMMENT 'username',
+  `username` VARCHAR(120) NOT NULL COMMENT 'username',
   `spittle_id` BIGINT NOT NULL COMMENT 'spittle id',
   `commented_id` BIGINT COMMENT 'commented_id',
   `text` TEXT NOT NULL COMMENT 'text text',

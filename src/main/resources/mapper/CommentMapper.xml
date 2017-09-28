@@ -37,7 +37,7 @@
         DELETE FROM comment
         WHERE id=#{commentId} AND username=#{username}
     </insert>
-    <select id="selectCount" parameterType="long">
+    <select id="selectCount" parameterType="long" resultType="int">
         SELECT COUNT(id)
         FROM comment
         WHERE spittle_id=#{spittleId}

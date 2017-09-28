@@ -20,8 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by xjshi.
  */
 public class AuthorizationControllerTest extends BaseTest {
-    private String username = "elgae";
-    private String password = "elgae_password";
+    private String username = "test";
+    private String password = "test_password";
     private static String token;
 
     @Before
