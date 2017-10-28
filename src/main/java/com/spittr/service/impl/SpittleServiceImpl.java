@@ -4,6 +4,7 @@ import com.spittr.exception.InvalidParameterException;
 import com.spittr.exception.NoPermissionException;
 import com.spittr.exception.spitter.SpitterNotFoundException;
 import com.spittr.mapper.SpittleMapper;
+import com.spittr.pojo.Page;
 import com.spittr.pojo.Spittle;
 import com.spittr.service.CommentService;
 import com.spittr.service.SpitterService;
@@ -11,7 +12,9 @@ import com.spittr.service.SpittleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SpittleServiceImpl implements SpittleService {
@@ -22,6 +25,13 @@ public class SpittleServiceImpl implements SpittleService {
 
     public List<Spittle> getList() {
         return spittleMapper.selectAll();
+    }
+
+    @Override
+    public List<Spittle> getSpittlesByPage(Page page) {
+        Map map = new HashMap();
+        map.put("page", page);
+        return spittleMapper.selectAllByPage(map);
     }
 
     public List<Spittle> getListByUsername(String username) {

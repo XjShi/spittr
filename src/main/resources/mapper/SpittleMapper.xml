@@ -41,6 +41,12 @@
         FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id
     </select>
 
+    <!--<select id="selectAllByPage" parameterType="java.util.Map" resultMap="spittleResultMap">-->
+        <!--SELECT-->
+        <!--<include refid="spittleDetailColumns"/>-->
+        <!--FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id-->
+    <!--</select>-->
+
     <select id="selectOne" resultMap="spittleResultMap" parameterType="long">
         SELECT
         <include refid="spittleDetailColumns"/>

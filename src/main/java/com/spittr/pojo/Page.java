@@ -34,6 +34,7 @@ public class Page {
 
     public void setTotalNumber(int totalNumber) {
         this.totalNumber = totalNumber;
+        count();
     }
 
     public int getCurrentPage() {
@@ -74,5 +75,15 @@ public class Page {
 
     public void setDbNumber(int dbNumber) {
         this.dbNumber = dbNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Page{" +
+                "totalNumber=" + totalNumber +
+                ", currentPage=" + currentPage +
+                ", totalPage=" + totalPage +
+                ", pageNumber=" + pageNumber +
+                '}';
     }
 }

@@ -9,6 +9,8 @@ import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.reflection.DefaultReflectorFactory;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,6 +23,8 @@ import java.util.Properties;
  */
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
 public class PageInterceptor implements Interceptor {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     public Object intercept(Invocation invocation) throws Throwable {
         StatementHandler statementHandler = (StatementHandler) invocation.getTarget();
         MetaObject metaObject = MetaObject.forObject(statementHandler, SystemMetaObject.DEFAULT_OBJECT_FACTORY,
@@ -35,7 +39,7 @@ public class PageInterceptor implements Interceptor {
             String countSql = "select count(*) from (" + sql + ")a";
             Connection connection = (Connection) invocation.getArgs()[0];
             PreparedStatement countStatement = connection.prepareStatement(countSql);
-            ParameterHandler parameterHandler = (ParameterHandler) metaObject.getValue("delegate.mappedStatement");
+            ParameterHandler parameterHandler = (ParameterHandler) metaObject.getValue("delegate.parameterHandler");
             parameterHandler.setParameters(countStatement);
             ResultSet rs = countStatement.executeQuery();
 
@@ -44,7 +48,8 @@ public class PageInterceptor implements Interceptor {
             if (rs.next()) {
                 page.setTotalNumber(rs.getInt(1));
             }
-            String pageSql = sql + "limit" + page.getDbIndex() + "," + page.getDbNumber(); //  sql statement with page function
+            logger.debug("page interceptor: " + page);
+            String pageSql = sql + " limit " + page.getDbIndex() + "," + page.getDbNumber(); //  sql statement with page function
             metaObject.setValue("delegate.boundSql.sql", pageSql);
         }
         return invocation.proceed();
