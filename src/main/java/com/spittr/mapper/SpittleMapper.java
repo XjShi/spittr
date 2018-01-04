@@ -10,6 +10,7 @@ public interface SpittleMapper {
     List<Spittle> selectAll();
     List<Spittle> selectAllByPage(Map<String, Object> parameter);
     List<Spittle> selectByUsername(String username);
+    List<Spittle> selectByUsernameAndPage(@Param("username") String username, @Param("start") int start, @Param("limit") int limit);
     int insertSpittle(Spittle spittle);
     Spittle getLatestOne(@Param("username") String username);
     int deleteSpittleById(@Param("id") long id);

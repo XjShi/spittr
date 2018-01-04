@@ -9,6 +9,7 @@ public interface SpittleService {
     List<Spittle> getList();
     List<Spittle> getSpittlesByPage(Page page);
     List<Spittle> getListByUsername(String username);
+    List<Spittle> getListByUsernameAndPage(String username, int pageIndex, int pageSize);
     Spittle saveSpittle(Spittle spittle);
     Spittle getLastestOne(String username);
     boolean deleteSpittle(String username, long id);

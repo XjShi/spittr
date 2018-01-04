@@ -38,8 +38,18 @@ public class SpittleServiceImpl implements SpittleService {
         if (!this.queryIfUserExistByUsername(username)) {
             throw new SpitterNotFoundException();
         }
-        List<Spittle> spittles = spittleMapper.selectByUsername(username);
-        return spittles;
+        return spittleMapper.selectByUsername(username);
+    }
+
+    public List<Spittle> getListByUsernameAndPage(String username, int pageIndex, int pageSize) {
+        if (username != null && username.length() > 0 && !this.queryIfUserExistByUsername(username)) {
+            throw new SpitterNotFoundException();
+        }
+        int start = 0;
+        if (pageIndex >= 1 && pageSize > 0) {
+            start = (pageIndex - 1) * pageSize;
+        }
+        return spittleMapper.selectByUsernameAndPage(username, start, pageSize);
     }
 
     public Spittle getSpittleDetail(long spittleId) {

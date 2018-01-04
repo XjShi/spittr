@@ -41,11 +41,26 @@
         FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id
     </select>
 
-    <!--<select id="selectAllByPage" parameterType="java.util.Map" resultMap="spittleResultMap">-->
-        <!--SELECT-->
-        <!--<include refid="spittleDetailColumns"/>-->
-        <!--FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id-->
-    <!--</select>-->
+    <select id="selectByUsernameAndPage" resultType="com.spittr.pojo.Spittle">
+        SELECT
+        id, username, text, created_at AS puslishTime, attachment
+        FROM spittle
+        WHERE id >=
+              (SELECT id
+               FROM spittle
+               WHERE enabled = TRUE
+               <if test="username != null and username.length() > 0">
+                   AND username=#{username}
+               </if>
+               ORDER BY id
+               LIMIT #{start}, 1)
+        <if test="username != null and username.length() > 0">
+        AND username=#{username}
+        </if>
+        <if test="limit > 0">
+            LIMIT #{limit}
+        </if>
+    </select>
 
     <select id="selectOne" resultMap="spittleResultMap" parameterType="long">
         SELECT

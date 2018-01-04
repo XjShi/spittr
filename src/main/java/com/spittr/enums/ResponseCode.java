@@ -7,6 +7,7 @@ public enum ResponseCode {
     NOT_FOUND(4),
     HAS_EXISTS(5),
     NO_PERMISSION(6),
+    USERNAME_UNAVAILABLE(7),
     AUTHORIZATION_REQUIRED(999);
 
     private int code;

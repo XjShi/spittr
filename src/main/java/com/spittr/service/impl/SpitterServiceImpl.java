@@ -1,7 +1,9 @@
 package com.spittr.service.impl;
 
+import com.spittr.enums.ResponseCode;
 import com.spittr.exception.InvalidParameterException;
 import com.spittr.exception.spitter.SpitterHasExistException;
+import com.spittr.exception.spitter.SpitterNameUnavailableException;
 import com.spittr.mapper.SpitterMapper;
 import com.spittr.pojo.Spitter;
 import com.spittr.service.SpitterService;
@@ -53,7 +55,9 @@ public class SpitterServiceImpl implements SpitterService {
     }
 
     public boolean validateStringForUsernamePurpose(String text) {
-        Assert.notNull(text, "username can't be null.");
+        if (StringUtils.containsWhitespace(text)) {
+            throw new SpitterNameUnavailableException("username can't contain whitespace", ResponseCode.USERNAME_UNAVAILABLE);
+        }
         return text.trim().length() > 0 && !StringUtils.isNumeric(text.trim());
     }
 
