@@ -39,7 +39,7 @@ CREATE TABLE comment(
   `create_time` TIMESTAMP NOT NULL DEFAULT current_timestamp COMMENT 'create time',
   `enabled` BOOL NOT NULL DEFAULT TRUE COMMENT 'enabled',
   PRIMARY KEY (id),
-  KEY idx_user_id(user_id)
+  KEY idx_username(username)
 ) ENGINE = InnoDB DEFAULT CHARSET = UTF8 COMMENT = 'comment table';
 
 ALTER TABLE spittr.comment
