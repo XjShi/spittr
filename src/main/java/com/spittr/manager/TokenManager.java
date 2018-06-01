@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class TokenManager {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    static final long EXPIRATIONTIME = 1000*60*60*24*1; // 1天
+    static final long EXPIRATIONTIME = 1000 * 60 * 60 * 24 * 1; // 1天
     static final String SECRET = "ThisIsASecret";
     public static final String TOKEN_PREFIX = "Bearer";
     public static final String AUTHORIZATION = "Authorization";
@@ -31,7 +31,7 @@ public class TokenManager {
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
         jwt = TOKEN_PREFIX + " " + jwt;
-        response.addHeader(AUTHORIZATION,  jwt);
+        response.addHeader(AUTHORIZATION, jwt);
         logger.info("authorization for [" + username + "] is " + jwt);
         redis.boundValueOps(username).set(jwt, EXPIRATIONTIME, TimeUnit.MILLISECONDS);
     }

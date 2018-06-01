@@ -28,9 +28,9 @@ public class AuthorizationController {
         try {
             spitter = authorizationService.login(username, password, response);
         } catch (SpitterNotFoundException e) {
-            return new BaseResponse(null, "username or password incorrent.");
+            return new BaseResponse<Spitter>(null, "username or password incorrent.");
         }
-        return new BaseResponse(spitter, "login successfully.");
+        return new BaseResponse<Spitter>(spitter, "login successfully.");
     }
 
     @Authorization
@@ -38,6 +38,6 @@ public class AuthorizationController {
     public BaseResponse<?> logout(@PathVariable("username") String username, HttpServletResponse response) {
         logger.info("logout: " + username);
         authorizationService.logout(username, null, response);
-        return new BaseResponse(null, "logout finished.");
+        return new BaseResponse<Object>(null, "logout finished.");
     }
 }

@@ -20,7 +20,7 @@ import java.util.List;
 public class SpittleController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public static final int DEFAULT_SPITTLES_PER_PAGE = 25;
+    private static final int DEFAULT_SPITTLES_PER_PAGE = 25;
     private int spittlesPerPage = DEFAULT_SPITTLES_PER_PAGE;
 
     @Autowired

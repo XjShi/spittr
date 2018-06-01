@@ -17,8 +17,6 @@ public class MybatisConfig {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
         bean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
-//        bean.setTypeAliasesPackage();
-//        bean.setMapperLocations(new Resource[] {new ClassPathResource("./mapper/SpitterMapper.xml")});
         return bean.getObject();
     }
 

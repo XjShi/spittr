@@ -30,17 +30,17 @@ public class AppWideExceptionHandler {
 
     @ExceptionHandler(InvalidParameterException.class)
     public BaseResponse<Object> invalidParameter(InvalidParameterException e) {
-        return new BaseResponse(e.getResponseCode().getCode(), e.getMessage(), null);
+        return new BaseResponse<Object>(e.getResponseCode().getCode(), e.getMessage(), null);
     }
 
     @ExceptionHandler(TransferPartErrorException.class)
     public BaseResponse<Object> transferPartError(TransferPartErrorException e) {
-        return new BaseResponse(e.getResponseCode().getCode(), e.getMessage(), null);
+        return new BaseResponse<Object>(e.getResponseCode().getCode(), e.getMessage(), null);
     }
 
     @ExceptionHandler(javax.naming.NoPermissionException.class)
     public BaseResponse<Object> noPermission(NoPermissionException e) {
-        return new BaseResponse(e.getResponseCode().getCode(), e.getMessage(), null);
+        return new BaseResponse<Object>(e.getResponseCode().getCode(), e.getMessage(), null);
     }
 
     @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
