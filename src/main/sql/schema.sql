@@ -82,3 +82,5 @@ ALTER TABLE spittr.comment ADD attachment TEXT DEFAULT NULL COMMENT 'attachments
 
 DROP TABLE spittr.comment_attachment;
 DROP TABLE spittr.spittle_attachment;
+
+ALTER TABLE spitter MODIFY password varchar(32) NOT NULL COMMENT 'password';
