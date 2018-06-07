@@ -43,7 +43,7 @@
 
     <select id="selectByUsernameAndPage" resultType="com.spittr.pojo.Spittle">
         SELECT
-        id, username, text, created_at AS puslishTime, attachment
+        id, username, text, created_at AS publishTime, attachment
         FROM spittle
         WHERE id >=
               (SELECT id
@@ -67,13 +67,6 @@
         <include refid="spittleDetailColumns"/>
         FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id
         WHERE 1=1 AND spittle.id=#{id}
-    </select>
-
-    <select id="selectByUsername" resultMap="spittleResultMap">
-        SELECT
-        <include refid="spittleDetailColumns"/>
-        FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id
-        WHERE 1=1 AND spittle.username=#{username}
     </select>
 
     <select id="getLatestOne" resultMap="spittleResultMap" parameterType="String">

@@ -48,13 +48,6 @@ public class SpittleMapperTest {
     }
 
     @Test
-    public void selectByUsername() throws Exception {
-        List<Spittle> list = mapper.selectByUsername("test");
-        int count = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "spittle", "username='test'");
-        Assert.assertEquals(count, list.size());
-    }
-
-    @Test
     public void insertSpittle() throws Exception {
         Spittle spittle = new Spittle("test1", "spittle from unit test, user is test1.", true);
         spittle.setPublishTime(new Timestamp(new Date().getTime()));

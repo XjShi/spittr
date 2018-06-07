@@ -23,24 +23,12 @@ public class SpittleServiceImpl implements SpittleService {
     @Autowired
     private SpitterService spitterService;
 
+    @Override
     public List<Spittle> getList() {
         return spittleMapper.selectAll();
     }
 
     @Override
-    public List<Spittle> getSpittlesByPage(Page page) {
-        Map map = new HashMap();
-        map.put("page", page);
-        return spittleMapper.selectAllByPage(map);
-    }
-
-    public List<Spittle> getListByUsername(String username) {
-        if (!this.queryIfUserExistByUsername(username)) {
-            throw new SpitterNotFoundException();
-        }
-        return spittleMapper.selectByUsername(username);
-    }
-
     public List<Spittle> getListByUsernameAndPage(String username, int pageIndex, int pageSize) {
         if (username != null && username.length() > 0 && !this.queryIfUserExistByUsername(username)) {
             throw new SpitterNotFoundException();
@@ -52,10 +40,12 @@ public class SpittleServiceImpl implements SpittleService {
         return spittleMapper.selectByUsernameAndPage(username, start, pageSize);
     }
 
+    @Override
     public Spittle getSpittleDetail(long spittleId) {
         return spittleMapper.selectOne(spittleId);
     }
 
+    @Override
     public Spittle saveSpittle(Spittle spittle) {
         if (!this.queryIfUserExistByUsername(spittle.getUsername())) {
             throw new SpitterNotFoundException();
@@ -64,16 +54,19 @@ public class SpittleServiceImpl implements SpittleService {
         return spittle;
     }
 
+    @Override
     public boolean queryIfExistById(long spittleId) {
         return spittleMapper.selectSpittleCountById(spittleId) > 0;
     }
 
+    @Override
     public Spittle getLastestOne(String username) {
         if (username.length() == 0)
             throw new InvalidParameterException("invalid username");
         return spittleMapper.getLatestOne(username);
     }
 
+    @Override
     public boolean deleteSpittle(String username, long id) {
         boolean hasPermission = isSpitterHasChangePermission(username, id);
         if (!hasPermission) {
@@ -83,12 +76,13 @@ public class SpittleServiceImpl implements SpittleService {
         return true;
     }
 
-    private boolean queryIfUserExistByUsername(String username) {
-        return spitterService.queryIfExistsByName(username);
-    }
-
+    @Override
     public boolean isSpitterHasChangePermission(String username, long id) {
         Spittle spittle = spittleMapper.selectOne(id);
         return spittle.getUsername().equals(username);
+    }
+
+    private boolean queryIfUserExistByUsername(String username) {
+        return spitterService.queryIfExistsByName(username);
     }
 }

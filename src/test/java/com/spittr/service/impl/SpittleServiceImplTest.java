@@ -33,15 +33,6 @@ public class SpittleServiceImplTest {
     }
 
     @Test
-    public void getListByUsername() throws Exception {
-        List<Spittle> spittles = spittleService.getListByUsername("shixj");
-        Iterator<Spittle> iterator = spittles.iterator();
-        while (iterator.hasNext()) {
-            assertEquals("shixj", iterator.next().getUsername());
-        }
-    }
-
-    @Test
     public void getSpittleDetail() throws Exception {
         Spittle spittle = spittleService.getSpittleDetail(3);
         assertEquals(3, spittle.getId().longValue());
@@ -66,11 +57,8 @@ public class SpittleServiceImplTest {
 
     @Test
     public void getLastestOne() throws Exception {
+        // todo: 补充测试代码
         Spittle spittle = spittleService.getLastestOne("shixj");
-        List<Spittle> spittleList = spittleService.getListByUsername("shixj");
-        spittleList.sort(Comparator.comparing(Spittle::getPublishTime).reversed());
-        assertEquals(spittleList.get(0).getPublishTime(), spittle.getPublishTime());
-        assertEquals(spittleList.get(0).getText(), spittle.getText());
     }
 
     @Test
