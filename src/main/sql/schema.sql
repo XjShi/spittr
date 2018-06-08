@@ -18,8 +18,6 @@ CREATE TABLE spittle(
   `username` VARCHAR(120) NOT NULL COMMENT 'username',
   `text` TEXT COMMENT 'text text',
   `created_at` TIMESTAMP NOT NULL DEFAULT current_timestamp COMMENT 'create time',
-  `repost` TEXT COMMENT '转发的用户的用户名',
-  `like` TEXT COMMENT '点赞的用户的用户名',
   `enabled` BOOL NOT NULL DEFAULT TRUE COMMENT 'if spittle is enabled',
   `attachment` TEXT DEFAULT NULL comment 'attachments',
   PRIMARY KEY (id),
@@ -41,3 +39,4 @@ CREATE TABLE comment(
   FOREIGN KEY (username) REFERENCES spitter (name) ON DELETE CASCADE ON UPDATE CASCADE,
   KEY idx_username(username)
 ) ENGINE = InnoDB DEFAULT CHARSET = UTF8 COMMENT = 'comment table';
+

@@ -12,8 +12,6 @@ public class Spittle implements Serializable {
     private Long id;
     private String username;
     private String text;
-    private String repost;  //  json text composed by reposter's username
-    private String like;    //  idem
     private String attachment;
     private boolean enabled;
     private Timestamp publishTime;
@@ -64,22 +62,6 @@ public class Spittle implements Serializable {
         return serialVersionUID;
     }
 
-    public String getRepost() {
-        return repost;
-    }
-
-    public void setRepost(String repost) {
-        this.repost = repost;
-    }
-
-    public String getLike() {
-        return like;
-    }
-
-    public void setLike(String like) {
-        this.like = like;
-    }
-
     public boolean isEnabled() {
         return enabled;
     }
@@ -110,8 +92,6 @@ public class Spittle implements Serializable {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", text='" + text + '\'' +
-                ", repost='" + repost + '\'' +
-                ", like='" + like + '\'' +
                 ", enabled=" + enabled +
                 ", publishTime=" + publishTime +
                 ", commentList=" + commentList +

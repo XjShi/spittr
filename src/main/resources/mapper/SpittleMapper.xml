@@ -8,8 +8,6 @@
       spittle.username AS spittle_username,
       spittle.text as spittle_text,
       spittle.created_at as spittle_created_at,
-      spittle.repost as spittle_repost,
-      spittle.like AS spittle_like,
       spittle.enabled AS spittle_enabled,
       spittle.attachment AS spittle_attachment,
       comment.id AS comment_id,
@@ -30,7 +28,6 @@
         <result column="spittle_repost" property="repost"/>
         <result column="spittle_enabled" property="enabled"/>
         <result column="spittle_attachment" property="attachment"/>
-        <result column="like" property="like"/>
         <collection property="commentList" ofType="com.spittr.pojo.Comment"
                     resultMap="com.spittr.mapper.CommentMapper.commentResultMap"/>
     </resultMap>
