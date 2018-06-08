@@ -6,7 +6,6 @@ import com.spittr.pojo.Spittle;
 import java.util.List;
 
 public interface SpittleService {
-    List<Spittle> getList();
     List<Spittle> getListByUsernameAndPage(String username, int pageIndex, int pageSize);
     Spittle saveSpittle(Spittle spittle);
     Spittle getLastestOne(String username);

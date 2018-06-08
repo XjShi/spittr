@@ -4,55 +4,59 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spittr.mapper.SpittleMapper">
     <sql id="spittleDetailColumns">
-      spittle.id AS spittle_id,
-      spittle.username AS spittle_username,
-      spittle.text as spittle_text,
-      spittle.created_at as spittle_created_at,
-      spittle.enabled AS spittle_enabled,
-      spittle.attachment AS spittle_attachment,
-      comment.id AS comment_id,
-      comment.username AS comment_username,
-      comment.commented_id AS comment_commented_id,
-      comment.spittle_id AS commented_spittle_id,
-      comment.text AS comment_text,
-      comment.create_time AS comment_create_time,
-      comment.enabled AS comment_enabled,
-      comment.attachment AS comment_attachment
+        spittle.id AS spittle_id,
+        spittle.username AS spittle_username,
+        spittle.text as spittle_text,
+        spittle.created_at as spittle_created_at,
+        spittle.enabled AS spittle_enabled,
+        spittle.attachment AS spittle_attachment,
+        spitter.id AS spitter_id,
+        spitter.avatar AS spitter_avatar,
+        spitter.created_at AS spitter_created_at,
+        spitter.enabled AS spitter_enabled,
+        comment.id AS comment_id,
+        comment.username AS comment_username,
+        comment.commented_id AS comment_commented_id,
+        comment.spittle_id AS commented_spittle_id,
+        comment.text AS comment_text,
+        comment.create_time AS comment_create_time,
+        comment.enabled AS comment_enabled,
+        comment.attachment AS comment_attachment
     </sql>
 
     <resultMap id="spittleResultMap" type="com.spittr.pojo.Spittle">
         <id column="spittle_id" property="id"/>
-        <result column="spittle_username" property="username"/>
         <result column="spittle_text" property="text"/>
         <result column="spittle_created_at" property="publishTime"/>
         <result column="spittle_repost" property="repost"/>
         <result column="spittle_enabled" property="enabled"/>
         <result column="spittle_attachment" property="attachment"/>
+        <association property="user" javaType="com.spittr.pojo.Spitter">
+            <id column="spitter_id" property="id"/>
+            <result column="spittle_username" property="username"/>
+            <result column="spitter_avatar" property="avatar"/>
+            <result column="spitter_created_at" property="registrationDate"/>
+            <result column="spitter_enabled" property="enabled"/>
+        </association>
         <collection property="commentList" ofType="com.spittr.pojo.Comment"
                     resultMap="com.spittr.mapper.CommentMapper.commentResultMap"/>
     </resultMap>
 
-    <select id="selectAll" resultMap="spittleResultMap">
+    <select id="selectByUsernameAndPage" resultMap="spittleResultMap">
         SELECT
         <include refid="spittleDetailColumns"/>
-        FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id
-    </select>
-
-    <select id="selectByUsernameAndPage" resultType="com.spittr.pojo.Spittle">
-        SELECT
-        id, username, text, created_at AS publishTime, attachment
+        FROM spittle LEFT JOIN comment on spittle.id = comment.spittle_id, spitter
+        WHERE spittle.id >=
+        (SELECT spittle.id
         FROM spittle
-        WHERE id >=
-              (SELECT id
-               FROM spittle
-               WHERE enabled = TRUE
-               <if test="username != null and username.length() > 0">
-                   AND username=#{username}
-               </if>
-               ORDER BY id
-               LIMIT #{start}, 1)
+        WHERE spittle.enabled= TRUE
         <if test="username != null and username.length() > 0">
-        AND username=#{username}
+            AND spittle.username=#{username}
+        </if>
+        ORDER BY spittle.id
+        LIMIT #{start}, 1)
+        <if test="username != null and username.length() > 0">
+            AND spittle.username=#{username}
         </if>
         <if test="limit > 0">
             LIMIT #{limit}
@@ -62,14 +66,14 @@
     <select id="selectOne" resultMap="spittleResultMap" parameterType="long">
         SELECT
         <include refid="spittleDetailColumns"/>
-        FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id
+        FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id LEFT JOIN spitter on spittle.username = spitter.name
         WHERE 1=1 AND spittle.id=#{id}
     </select>
 
     <select id="getLatestOne" resultMap="spittleResultMap" parameterType="String">
         SELECT
-        <include refid="spittleDetailColumns"></include>
-        FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id
+        <include refid="spittleDetailColumns"/>
+        FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id LEFT JOIN spitter on spittle.username = spitter.name
         WHERE 1=1 AND spittle.username=#{username}
         ORDER BY created_at DESC
         LIMIT 1
@@ -78,16 +82,17 @@
     <select id="selectSpittleCountById" parameterType="long" resultType="java.lang.Integer">
         SELECT COUNT(id)
         FROM spittle
-        WHERE id=#{id}
+        WHERE id = #{id}
     </select>
 
     <insert id="insertSpittle" parameterType="com.spittr.pojo.Spittle" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO spittle(username,text,attachment,created_at,enabled)
-        VALUES(#{username},#{text},#{attachment},#{publishTime},#{enabled})
+        INSERT INTO spittle (username, text, attachment, created_at, enabled)
+        VALUES (#{username}, #{text}, #{attachment}, #{publishTime}, #{enabled})
     </insert>
 
     <delete id="deleteSpittleById" parameterType="Long">
-        DELETE FROM spittle WHERE id=#{id}
+        DELETE FROM spittle
+        WHERE id = #{id}
     </delete>
 
 </mapper>

@@ -24,11 +24,6 @@ public class SpittleServiceImpl implements SpittleService {
     private SpitterService spitterService;
 
     @Override
-    public List<Spittle> getList() {
-        return spittleMapper.selectAll();
-    }
-
-    @Override
     public List<Spittle> getListByUsernameAndPage(String username, int pageIndex, int pageSize) {
         if (username != null && username.length() > 0 && !this.queryIfUserExistByUsername(username)) {
             throw new SpitterNotFoundException();
@@ -47,7 +42,7 @@ public class SpittleServiceImpl implements SpittleService {
 
     @Override
     public Spittle saveSpittle(Spittle spittle) {
-        if (!this.queryIfUserExistByUsername(spittle.getUsername())) {
+        if (!this.queryIfUserExistByUsername(spittle.getUser().getUsername())) {
             throw new SpitterNotFoundException();
         }
         spittleMapper.insertSpittle(spittle);
@@ -79,7 +74,7 @@ public class SpittleServiceImpl implements SpittleService {
     @Override
     public boolean isSpitterHasChangePermission(String username, long id) {
         Spittle spittle = spittleMapper.selectOne(id);
-        return spittle.getUsername().equals(username);
+        return spittle.getUser().getUsername().equals(username);
     }
 
     private boolean queryIfUserExistByUsername(String username) {

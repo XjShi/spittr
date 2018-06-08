@@ -27,12 +27,6 @@ public class SpittleServiceImplTest {
     private SpittleService spittleService;
 
     @Test
-    public void getList() throws Exception {
-        List<Spittle> spittleList = spittleService.getList();
-        Assert.assertTrue(spittleList instanceof List);
-    }
-
-    @Test
     public void getSpittleDetail() throws Exception {
         Spittle spittle = spittleService.getSpittleDetail(3);
         assertEquals(3, spittle.getId().longValue());

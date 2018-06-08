@@ -41,13 +41,6 @@ public class SpittleMapperTest {
     }
 
     @Test
-    public void selectAll() throws Exception {
-        int count = JdbcTestUtils.countRowsInTable(jdbcTemplate, "spittle");
-        List<Spittle> list = mapper.selectAll();
-        Assert.assertEquals(count, list.size());
-    }
-
-    @Test
     public void insertSpittle() throws Exception {
         Spittle spittle = new Spittle("test1", "spittle from unit test, user is test1.", true);
         spittle.setPublishTime(new Timestamp(new Date().getTime()));
@@ -63,7 +56,7 @@ public class SpittleMapperTest {
         Spittle expectSpittle = getSpittleUseJdbcTemplate(sql);
         Spittle actualSpittle = mapper.getLatestOne("test");
         Assert.assertEquals(expectSpittle.getId(), actualSpittle.getId());
-        Assert.assertEquals(expectSpittle.getUsername(), actualSpittle.getUsername());
+        Assert.assertEquals(expectSpittle.getUser().getUsername(), actualSpittle.getUser().getUsername());
         Assert.assertEquals(expectSpittle.getText(), actualSpittle.getText());
         Assert.assertEquals(expectSpittle.getPublishTime(), actualSpittle.getPublishTime());
     }
@@ -102,7 +95,7 @@ public class SpittleMapperTest {
             if (rs.next()) {
                 spittle = new Spittle();
                 spittle.setId(rs.getLong("id"));
-                spittle.setUsername(rs.getString("username"));
+                spittle.getUser().setUsername(rs.getString("username"));
                 spittle.setText(rs.getString("text"));
                 spittle.setPublishTime(rs.getTimestamp("created_at"));
             }
