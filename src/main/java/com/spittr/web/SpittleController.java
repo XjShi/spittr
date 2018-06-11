@@ -67,11 +67,9 @@ public class SpittleController {
 
         String username = tokenManager.getValidUsername(request);
         enabled = enabled == null ? true : enabled;
-        com.spittr.pojo.Spittle spittle = new com.spittr.pojo.Spittle(username, text, enabled);
-        spittle.setAttachment(attachment);
-        spittleService.saveSpittle(spittle);
+        spittleService.saveSpittle(username, text, attachment, enabled);
 
-        spittle = spittleService.getLastestOne(username);
+        Spittle spittle = spittleService.getLastestOne(username);
         return new BaseResponse<com.spittr.pojo.Spittle>(spittle);
     }
 

@@ -42,9 +42,7 @@ public class SpittleMapperTest {
 
     @Test
     public void insertSpittle() throws Exception {
-        Spittle spittle = new Spittle("test1", "spittle from unit test, user is test1.", true);
-        spittle.setPublishTime(new Timestamp(new Date().getTime()));
-        int count = mapper.insertSpittle(spittle);
+        int count = mapper.insertOne("test1", "spittle from unit test, user is test1", null, true);
         Assert.assertEquals(1, count);
         count = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "spittle", "username='test1'");
         Assert.assertEquals(2, count);

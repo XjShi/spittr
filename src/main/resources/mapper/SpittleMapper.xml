@@ -75,7 +75,7 @@
         <include refid="spittleDetailColumns"/>
         FROM spittle LEFT JOIN comment ON spittle.id = comment.spittle_id LEFT JOIN spitter on spittle.username = spitter.name
         WHERE 1=1 AND spittle.username=#{username}
-        ORDER BY created_at DESC
+        ORDER BY spittle.created_at DESC
         LIMIT 1
     </select>
 
@@ -85,9 +85,9 @@
         WHERE id = #{id}
     </select>
 
-    <insert id="insertSpittle" parameterType="com.spittr.pojo.Spittle" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO spittle (username, text, attachment, created_at, enabled)
-        VALUES (#{username}, #{text}, #{attachment}, #{publishTime}, #{enabled})
+    <insert id="insertOne" useGeneratedKeys="true" keyColumn="id">
+        INSERT INTO spittle (username, text, attachment, enabled)
+        VALUES (#{username}, #{text}, #{attachment}, #{enabled})
     </insert>
 
     <delete id="deleteSpittleById" parameterType="Long">

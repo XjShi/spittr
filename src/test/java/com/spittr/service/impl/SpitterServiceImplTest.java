@@ -66,17 +66,5 @@ public class SpitterServiceImplTest {
         result = spitterService.queryIfExistsByName("test-adafsjln9u90");
         assertFalse(result);
     }
-//
-//    @Test
-//    public void getProfileById() throws Exception {
-//    }
-//
-//    @Test
-//    public void getProfileByUsername() throws Exception {
-//    }
-//
-//    @Test
-//    public void getProfileByUsername1() throws Exception {
-//    }
 
 }

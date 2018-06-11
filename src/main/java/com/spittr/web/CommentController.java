@@ -53,6 +53,6 @@ public class CommentController {
         logger.info("delete comment[" + commentId + "] of spittle[" + id + "].");
         String username = tokenManager.getValidUsername(request);
         commentService.deleteComment(username, commentId);
-        return new BaseResponse(null, "delete comment successfully.");
+        return new BaseResponse<Object>(null, "delete comment successfully.");
     }
 }

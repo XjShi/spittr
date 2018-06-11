@@ -36,9 +36,9 @@ public class SpittleServiceImplTest {
     @Test
     public void saveSpittle() throws Exception {
         String spittleText = "spittle from unit test.";
-        Spittle spittle = new Spittle("shixj", "spittle from unit test.", true);
-        spittle = spittleService.saveSpittle(spittle);
-        assertEquals(spittleText, spittle.getText());
+        String username = "shixj";
+        spittleService.saveSpittle(username, spittleText, null, true);
+        assertEquals(spittleText, spittleService.getLastestOne(username).getText());
     }
 
     @Test
@@ -47,12 +47,6 @@ public class SpittleServiceImplTest {
         assertTrue(result);
         result = spittleService.queryIfExistById(2);
         assertFalse(result);
-    }
-
-    @Test
-    public void getLastestOne() throws Exception {
-        // todo: 补充测试代码
-        Spittle spittle = spittleService.getLastestOne("shixj");
     }
 
     @Test

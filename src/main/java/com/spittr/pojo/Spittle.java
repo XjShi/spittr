@@ -11,7 +11,7 @@ import java.util.List;
 public class Spittle implements Serializable {
     private static final long serialVersionUID = 1L;    //serialVersionUID
     private Long id;
-//    private String username;
+    //    private String username;
     private String text;
     private String attachment;
     private boolean enabled;
@@ -20,13 +20,6 @@ public class Spittle implements Serializable {
     private Spitter user;
 
     public Spittle() {
-    }
-
-    // todo: remove username parameter
-    public Spittle(String username, String text, boolean enabled) {
-//        this.username = username;
-        this.text = text;
-        this.enabled = enabled;
     }
 
     public Long getId() {
@@ -80,9 +73,11 @@ public class Spittle implements Serializable {
     public void setAttachment(String attachment) {
         this.attachment = attachment;
     }
+
     public Spitter getUser() {
         return user;
     }
+
     public void setUser(Spitter user) {
         this.user = user;
     }

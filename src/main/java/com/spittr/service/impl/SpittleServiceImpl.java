@@ -41,12 +41,11 @@ public class SpittleServiceImpl implements SpittleService {
     }
 
     @Override
-    public Spittle saveSpittle(Spittle spittle) {
-        if (!this.queryIfUserExistByUsername(spittle.getUser().getUsername())) {
+    public void saveSpittle(String username, String text, String attachment, boolean enabled) {
+        if (!this.queryIfUserExistByUsername(username)) {
             throw new SpitterNotFoundException();
         }
-        spittleMapper.insertSpittle(spittle);
-        return spittle;
+        spittleMapper.insertOne(username, text, attachment, enabled);
     }
 
     @Override
