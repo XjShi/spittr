@@ -2,6 +2,7 @@ package com.spittr.web;
 
 import com.spittr.annotation.Authorization;
 import com.spittr.enums.ResponseCode;
+import com.spittr.exception.InvalidParameterException;
 import com.spittr.manager.TokenManager;
 import com.spittr.pojo.BaseResponse;
 import com.spittr.pojo.Spittle;
@@ -28,6 +29,21 @@ public class SpittleController {
     @Autowired
     private TokenManager tokenManager;
 
+    @Authorization
+    @RequestMapping(value = "/timeline")
+    public BaseResponse<List<Spittle>> getTimeline(@RequestParam(value = "pageIndex", required = false, defaultValue = "1") String pageIndex,
+                                                   @RequestParam(value = "pageSize", required = false, defaultValue = "20") String pageSize,
+                                                   HttpServletRequest request) {
+        if (!StringUtils.isNumeric(pageIndex) || !StringUtils.isNumeric(pageSize)) {
+            throw new InvalidParameterException("请求参数错误");
+        }
+
+        String username = tokenManager.getValidUsername(request);
+        List<Spittle> spittleList = spittleService.getListByUsernameAndPage(username, Integer.valueOf(pageIndex), Integer.valueOf(pageSize));
+        return new BaseResponse<>(spittleList);
+    }
+
+
     /**
      * get spittle list
      * @param username
@@ -37,17 +53,17 @@ public class SpittleController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public BaseResponse<List<com.spittr.pojo.Spittle>> show(@RequestParam(value = "username", required = false) String username,
-                                                                      @RequestParam(value = "pageIndex", required = false) String pageIndex,
-                                                                      @RequestParam(value = "pageSize", required = false) String pageSize) {
+                                                            @RequestParam(value = "pageIndex", required = false, defaultValue = "1") String pageIndex,
+                                                            @RequestParam(value = "pageSize", required = false, defaultValue = "20") String pageSize) {
         logger.info("get spittle of [" + username + "]. pageIndex = " + pageIndex + " pageSize = " + pageSize);
 
-        String tmpUsername = StringUtils.isNotBlank(username) ? username : null;
-        int tmpPageIndex = StringUtils.isNumeric(pageIndex) ? Integer.parseInt(pageIndex) : 0;
-        int tmpPageSize = StringUtils.isNumeric(pageSize) ? Integer.parseInt(pageSize) : 0;
+        if (!StringUtils.isNumeric(pageIndex) || !StringUtils.isNumeric(pageSize)) {
+            throw new InvalidParameterException("请求参数错误");
+        }
 
         return new BaseResponse<List<Spittle>>(ResponseCode.SUCCESS.getCode(),
                 "get spittle list successfully",
-                spittleService.getListByUsernameAndPage(username, tmpPageIndex, tmpPageSize));
+                spittleService.getListByUsernameAndPage(username, Integer.parseInt(pageIndex), Integer.parseInt(pageSize)));
     }
 
     /**

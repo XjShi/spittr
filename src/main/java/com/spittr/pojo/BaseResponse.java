@@ -17,6 +17,10 @@ public class BaseResponse<T> {
         this(ResponseCode.SUCCESS.getCode(), message, data);
     }
 
+    public BaseResponse(int code, String message) {
+        this(code, message, null);
+    }
+
     public BaseResponse(int code, String message, T data) {
         this.code = code;
         this.message = message;

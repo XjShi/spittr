@@ -42,25 +42,53 @@
                     resultMap="com.spittr.mapper.CommentMapper.commentResultMap"/>
     </resultMap>
 
+    <sql id="spittleColumns">
+        spittle.id         AS spittle_id,
+        spittle.username   AS spittle_username,
+        spittle.text       as spittle_text,
+        spittle.created_at as spittle_created_at,
+        spittle.enabled    AS spittle_enabled,
+        spittle.attachment AS spittle_attachment
+    </sql>
+    <sql id="spitterColumns">
+        spitter.id           AS spitter_id,
+        spitter.avatar       AS spitter_avatar,
+        spitter.created_at   AS spitter_created_at,
+        spitter.enabled      AS spitter_enabled
+    </sql>
+    <sql id="commentColumns">
+        comment.id           AS comment_id,
+        comment.username     AS comment_username,
+        comment.commented_id AS comment_commented_id,
+        comment.spittle_id   AS commented_spittle_id,
+        comment.text         AS comment_text,
+        comment.create_time  AS comment_create_time,
+        comment.enabled      AS comment_enabled,
+        comment.attachment   AS comment_attachment
+    </sql>
+
     <select id="selectByUsernameAndPage" resultMap="spittleResultMap">
-        SELECT
-        <include refid="spittleDetailColumns"/>
-        FROM spittle LEFT JOIN comment on spittle.id = comment.spittle_id, spitter
-        WHERE spittle.id >=
-        (SELECT spittle.id
-        FROM spittle
-        WHERE spittle.enabled= TRUE
-        <if test="username != null and username.length() > 0">
-            AND spittle.username=#{username}
-        </if>
-        ORDER BY spittle.id
-        LIMIT #{start}, 1)
-        <if test="username != null and username.length() > 0">
-            AND spittle.username=#{username}
-        </if>
-        <if test="limit > 0">
-            LIMIT #{limit}
-        </if>
+        select
+            ST.*,
+            <include refid="spitterColumns"/>,
+            <include refid="commentColumns"/>
+        from
+            (SELECT
+                <include refid="spittleColumns"/>
+             FROM spittle
+             WHERE spittle.id >= (SELECT spittle.id
+                                  FROM spittle
+                                  WHERE spittle.enabled = TRUE
+                                  ORDER BY spittle.id
+                                  LIMIT #{start}, 1)
+                    <if test="username != null and username.length() > 0">
+                        AND spittle.username=#{username}
+                    </if>
+             ORDER BY spittle.id
+             LIMIT #{limit}) AS ST
+            LEFT JOIN comment on ST.spittle_id = comment.spittle_id
+            LEFT JOIN spitter on ST.spittle_username = spitter.name
+        ORDER BY ST.spittle_id;
     </select>
 
     <select id="selectOne" resultMap="spittleResultMap" parameterType="long">

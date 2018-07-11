@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface SpittleMapper {
-    List<Spittle> selectByUsernameAndPage(@Param("username") String username, @Param("start") int start, @Param("limit") int limit);
+    List<Spittle> selectByUsernameAndPage(@Param("username") String username,
+                                          @Param("start") int start,
+                                          @Param("limit") int limit);
     int insertOne(@Param("username") String username,
                       @Param("text") String text,
                       @Param("attachment") String attachment,

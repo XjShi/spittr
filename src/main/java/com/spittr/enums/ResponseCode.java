@@ -8,6 +8,7 @@ public enum ResponseCode {
     HAS_EXISTS(5),
     NO_PERMISSION(6),
     USERNAME_UNAVAILABLE(7),
+    USERNAME_OR_PASSWORD_INCORRECT(8),
     AUTHORIZATION_REQUIRED(999);
 
     private int code;

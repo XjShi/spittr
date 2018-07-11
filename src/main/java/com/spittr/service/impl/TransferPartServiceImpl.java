@@ -107,7 +107,7 @@ public class TransferPartServiceImpl implements TransferPartService {
     private boolean ensureDirectoryExists(String path) {
         java.io.File file = new java.io.File(path);
         if (!file.exists()) {
-            return file.mkdir();
+            return file.mkdirs();
         }
         return true;
     }
