@@ -37,8 +37,8 @@ api | 参数 | 方法 | 说明
 ### Spittle
 api | 参数 | 方法 | 说明
 -- | -- | -- | --
-/spittle | | GET | 获取 spittle 列表
-/spittle/:username | | GET | 获取由用户名为 username 的用户发布的 spittle
+/spittle | username(可选)、pageIndex(可选，默认为1）、pageSize（可选，默认为20） | GET | 获取 spittle 列表
+/spittle/timeline | | GET | 获取当前登录用户（即 header 中包含有效的 Authorization）的历史发布记录，如果登录失效或者未登录，则 http 响应码为 999
 /spittle | text, attachment(可选，代表附件数组的json字符串), enabled(可选) | POST | 发布spittle
 /spittle/:id | | DELETE | 删除指定的 spittle
 /spittle/:id/comment | | GET | 获取制定 spittle 的评论

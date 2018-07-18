@@ -13,12 +13,8 @@ CREATE TABLE spittle (
   username       VARCHAR(120)                        NOT NULL,
   text           VARCHAR(1024),
   created_at     TIMESTAMP DEFAULT current_timestamp NOT NULL,
-  attach_type    INTEGER,
-  attach_content VARCHAR(1024),
-  repost         VARCHAR(1024),
-  comment        VARCHAR(1024),
-  "like"         VARCHAR(1024),
-  enabled        BOOLEAN DEFAULT TRUE                NOT NULL
+  enabled        BOOLEAN DEFAULT TRUE                NOT NULL,
+  attachment     VARCHAR(1024)
 );
 
 CREATE TABLE comment (
@@ -27,10 +23,9 @@ CREATE TABLE comment (
   spittle_id     BIGINT                              NOT NULL,
   commented_id   BIGINT,
   text           VARCHAR(1024)                       NOT NULL,
-  attach_type    INTEGER,
-  attach_content VARCHAR(1024),
   create_time    TIMESTAMP DEFAULT current_timestamp NOT NULL,
-  enabled        BOOLEAN DEFAULT TRUE                NOT NULL
+  enabled        BOOLEAN DEFAULT TRUE                NOT NULL,
+  attachment     VARCHAR(1024)
 );
 
 ALTER TABLE comment
@@ -50,19 +45,3 @@ ALTER TABLE spittle
 FOREIGN KEY (username) REFERENCES spitter (name)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
-
-ALTER TABLE spittle
-    DROP comment;
-ALTER TABLE spittle
-    DROP attach_type;
-ALTER TABLE comment
-    DROP attach_type;
-ALTER TABLE spittle
-    DROP attach_content;
-ALTER TABLE comment
-    DROP attach_content;
-
-ALTER TABLE spittle
-  ADD COLUMN attachment VARCHAR(1024) DEFAULT NULL;
-ALTER TABLE comment
-  ADD attachment VARCHAR(1024) DEFAULT NULL;
